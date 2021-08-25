@@ -8,8 +8,8 @@ namespace VerifyTests
     {
         public static void Initialize()
         {
-            VerifierSettings.RegisterFileConverter("pdf", ConvertPdf);
-            VerifierSettings.RegisterFileConverter<IDocReader>(ConvertPdf);
+            VerifierSettings.RegisterFileConverter("pdf", Convert);
+            VerifierSettings.RegisterFileConverter<IDocReader>(Convert);
         }
 
         public static void PagesToInclude(this VerifySettings settings, int count)

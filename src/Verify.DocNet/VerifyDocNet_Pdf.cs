@@ -12,22 +12,22 @@ namespace VerifyTests
 {
     public static partial class VerifyDocNet
     {
-        static ConversionResult ConvertPdf(Stream stream, IReadOnlyDictionary<string, object> settings)
+        static ConversionResult Convert(Stream stream, IReadOnlyDictionary<string, object> settings)
         {
             IDocReader reader = DocLib.Instance.GetDocReader(stream.ToBytes(), new(1080, 1920));
 
-            return ConvertPdf(reader, settings);
+            return Convert(reader, settings);
         }
 
-        static ConversionResult ConvertPdf(IDocReader document, IReadOnlyDictionary<string, object> settings)
+        static ConversionResult Convert(IDocReader document, IReadOnlyDictionary<string, object> settings)
         {
-            var targets = GetPdfStreams(document, settings).ToList();
+            var targets = GetStreams(document, settings).ToList();
             return new(null, targets);
         }
 
         static NaiveTransparencyRemover transparencyRemover = new();
 
-        static IEnumerable<Target> GetPdfStreams(IDocReader document, IReadOnlyDictionary<string, object> settings)
+        static IEnumerable<Target> GetStreams(IDocReader document, IReadOnlyDictionary<string, object> settings)
         {
             var pagesToInclude = settings.GetPagesToInclude(document.GetPageCount());
             for (var index = 0; index < pagesToInclude; index++)
@@ -39,12 +39,12 @@ namespace VerifyTests
                 var width = reader.GetPageWidth();
                 var height = reader.GetPageHeight();
 
-                using var bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
+                using var bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
 
-                AddBytes(bmp, rawBytes);
+                AddBytes(bitmap, rawBytes);
 
                 var stream = new MemoryStream();
-                bmp.Save(stream, ImageFormat.Png);
+                bitmap.Save(stream, ImageFormat.Png);
                 yield return new("png", stream);
             }
         }
