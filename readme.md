@@ -1,6 +1,6 @@
 # <img src="/src/icon.png" height="30px"> Verify.DocNet
 
-[![Build status](https://ci.appveyor.com/api/projects/status/7k8hh0guut2ioak2?svg=true)](https://ci.appveyor.com/project/SimonCropp/Verify-DocNet)
+[![Build status](https://ci.appveyor.com/api/projects/status/41y3vomprwgnsheq?svg=true)](https://ci.appveyor.com/project/SimonCropp/Verify-DocNet)
 [![NuGet Status](https://img.shields.io/nuget/v/Verify.DocNet.svg)](https://www.nuget.org/packages/Verify.DocNet/)
 
 Extends [Verify](https://github.com/VerifyTests/Verify) to allow verification of documents via [DocNet](https://github.com/GowenGit/docnet).
@@ -40,10 +40,7 @@ public static class ModuleInitializer
 <!-- endSnippet -->
 
 
-### PDF
-
-
-#### Verify a file
+### Verify a file
 
 <!-- snippet: VerifyPdf -->
 <a id='snippet-verifypdf'></a>
@@ -58,7 +55,7 @@ public Task VerifyPdf()
 <!-- endSnippet -->
 
 
-#### Verify a Stream
+### Verify a Stream
 
 <!-- snippet: VerifyPdfStream -->
 <a id='snippet-verifypdfstream'></a>
@@ -74,7 +71,7 @@ public Task VerifyPdfStream()
 <!-- endSnippet -->
 
 
-#### Result
+### Result
 
 [Samples.VerifyPdf.01.verified.png](/src/Tests/Samples.VerifyPdf.00.verified.png):
 
@@ -86,7 +83,6 @@ public Task VerifyPdfStream()
 http://file-examples.com/
 
 
-
 ## Icon
 
-[Swirl](https://thenounproject.com/term/swirl/1568686/) designed by [creativepriyanka](https://thenounproject.com/creativepriyanka) from [The Noun Project](https://thenounproject.com/).
+[Pdf](https://thenounproject.com/term/pdf/533502/) designed by [Alfredo](https://thenounproject.com/AlfredoCreates) from [The Noun Project](https://thenounproject.com/).
