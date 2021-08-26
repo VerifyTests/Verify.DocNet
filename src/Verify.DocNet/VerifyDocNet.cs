@@ -23,7 +23,7 @@ namespace VerifyTests
             return settings;
         }
 
-        internal static int GetPagesToInclude(this IReadOnlyDictionary<string, object> settings, int count)
+        static int GetPagesToInclude(this IReadOnlyDictionary<string, object> settings, int count)
         {
             if (!settings.TryGetValue("VerifyDocNetPagesToInclude", out var value))
             {
