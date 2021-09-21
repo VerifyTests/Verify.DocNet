@@ -26,12 +26,12 @@ namespace VerifyTests
 
         static int GetPagesToInclude(this IReadOnlyDictionary<string, object> settings, int count)
         {
-            if (!settings.TryGetValue("VerifyDocNetPagesToInclude", out var value))
+            if (settings.TryGetValue("VerifyDocNetPagesToInclude", out var value))
             {
-                return count;
+                return Math.Min(count, (int)value);
             }
 
-            return Math.Min(count, (int) value);
+            return count;
         }
 
         public static void PageDimensions(this VerifySettings settings, PageDimensions pageDimensions)
@@ -47,12 +47,12 @@ namespace VerifyTests
 
         static PageDimensions GetPageDimensions(this IReadOnlyDictionary<string, object> settings, PageDimensions pageDimensions)
         {
-            if (!settings.TryGetValue("VerifyDocNetPageDimensions", out var value))
+            if (settings.TryGetValue("VerifyDocNetPageDimensions", out var value))
             {
-                return pageDimensions;
+                return (PageDimensions)value;
             }
 
-            return (PageDimensions) value;
+            return pageDimensions;
         }
     }
 }
