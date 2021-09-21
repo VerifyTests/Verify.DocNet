@@ -48,10 +48,11 @@ public static class ModuleInitializer
 [Test]
 public Task VerifyPdf()
 {
-    return Verifier.VerifyFile("sample.pdf");
+    return Verifier.VerifyFile("sample.pdf")
+        .PageDimensions(new(1080, 1920));
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L9-L17' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdf' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L10-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdf' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -64,10 +65,11 @@ public Task VerifyPdf()
 public Task VerifyPdfStream()
 {
     return Verifier.Verify(File.OpenRead("sample.pdf"))
-        .UseExtension("pdf");
+        .UseExtension("pdf")
+        .PageDimensions(new(1080, 1920));
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L19-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdfstream' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L21-L31' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdfstream' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
