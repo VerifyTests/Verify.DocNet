@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using VerifyNUnit;
 using NUnit.Framework;
+using VerifyTests;
 
 [TestFixture]
 public class Samples
@@ -11,7 +12,8 @@ public class Samples
     [Test]
     public Task VerifyPdf()
     {
-        return Verifier.VerifyFile("sample.pdf");
+        return Verifier.VerifyFile("sample.pdf")
+            .PageDimensions(new(1080, 1920));
     }
 
     #endregion
@@ -22,7 +24,8 @@ public class Samples
     public Task VerifyPdfStream()
     {
         return Verifier.Verify(File.OpenRead("sample.pdf"))
-            .UseExtension("pdf");
+            .UseExtension("pdf")
+            .PageDimensions(new(1080, 1920));
     }
 
     #endregion
