@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Docnet.Core.Models;
 using Docnet.Core.Readers;
 
 namespace VerifyTests
@@ -31,6 +32,27 @@ namespace VerifyTests
             }
 
             return Math.Min(count, (int) value);
+        }
+
+        public static void PageDimensions(this VerifySettings settings, PageDimensions pageDimensions)
+        {
+            settings.Context["VerifyDocNetPageDimensions"] = pageDimensions;
+        }
+
+        public static SettingsTask PageDimensions(this SettingsTask settings, PageDimensions pageDimensions)
+        {
+            settings.CurrentSettings.PageDimensions(pageDimensions);
+            return settings;
+        }
+
+        static PageDimensions GetPageDimensions(this IReadOnlyDictionary<string, object> settings, PageDimensions pageDimensions)
+        {
+            if (!settings.TryGetValue("VerifyDocNetPageDimensions", out var value))
+            {
+                return pageDimensions;
+            }
+
+            return (PageDimensions) value;
         }
     }
 }

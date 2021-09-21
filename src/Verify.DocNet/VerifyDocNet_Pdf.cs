@@ -14,7 +14,8 @@ namespace VerifyTests
     {
         static ConversionResult Convert(Stream stream, IReadOnlyDictionary<string, object> settings)
         {
-            IDocReader reader = DocLib.Instance.GetDocReader(stream.ToBytes(), new(1080, 1920));
+            var pageDimensions = settings.GetPageDimensions(new(scalingFactor: 2));
+            IDocReader reader = DocLib.Instance.GetDocReader(stream.ToBytes(), pageDimensions);
 
             return Convert(reader, settings);
         }
