@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Docnet.Core;
 using Docnet.Core.Converters;
 using Docnet.Core.Readers;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace VerifyTests
 {
@@ -41,25 +40,12 @@ namespace VerifyTests
                 var width = reader.GetPageWidth();
                 var height = reader.GetPageHeight();
 
-                using var bitmap = new Bitmap(width, height, PixelFormat.Format32bppArgb);
-
-                AddBytes(bitmap, rawBytes);
+                var image = Image.LoadPixelData<Bgra32>(rawBytes, width, height);
 
                 var stream = new MemoryStream();
-                bitmap.Save(stream, ImageFormat.Png);
+                image.SaveAsPng(stream);
                 yield return new("png", stream);
             }
-        }
-
-        static void AddBytes(Bitmap bmp, byte[] rawBytes)
-        {
-            var rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-
-            var bmpData = bmp.LockBits(rect, ImageLockMode.WriteOnly, bmp.PixelFormat);
-            var pNative = bmpData.Scan0;
-
-            Marshal.Copy(rawBytes, 0, pNative, rawBytes.Length);
-            bmp.UnlockBits(bmpData);
         }
     }
 }
