@@ -33,10 +33,11 @@ public static class ModuleInitializer
     public static void Initialize()
     {
         VerifyDocNet.Initialize();
+        VerifyImageMagick.RegisterComparers(threshold: 0.05, ImageMagick.ErrorMetric.PerceptualHash);
     }
 }
 ```
-<sup><a href='/src/Tests/ModuleInitializer.cs#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-ModuleInitializer.cs' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/ModuleInitializer.cs#L1-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-ModuleInitializer.cs' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
