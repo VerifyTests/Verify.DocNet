@@ -49,12 +49,10 @@ public static class ModuleInitializer
 [Test]
 public Task VerifyPdf()
 {
-    return Verifier.VerifyFile("sample.pdf")
-        .PreserveTransparency()
-        .PageDimensions(new(1080, 1920));
+    return Verifier.VerifyFile("sample.pdf");
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L10-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdf' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L10-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdf' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -67,11 +65,10 @@ public Task VerifyPdf()
 public Task VerifyPdfStream()
 {
     return Verifier.Verify(File.OpenRead("sample.pdf"))
-        .UseExtension("pdf")
-        .PageDimensions(new(1080, 1920));
+        .UseExtension("pdf");
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L22-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdfstream' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L41-L50' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdfstream' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -80,6 +77,37 @@ public Task VerifyPdfStream()
 [Samples.VerifyPdf.01.verified.png](/src/Tests/Samples.VerifyPdf.00.verified.png):
 
 <img src="/src/Tests/Samples.VerifyPdf.00.verified.png" width="200px">
+
+
+## PreserveTransparency
+
+<!-- snippet: PreserveTransparency -->
+<a id='snippet-preservetransparency'></a>
+```cs
+[Test]
+public Task VerifyPreserveTransparency()
+{
+    return Verifier.VerifyFile("sample.pdf")
+        .PreserveTransparency();
+}
+```
+<sup><a href='/src/Tests/Samples.cs#L20-L29' title='Snippet source file'>snippet source</a> | <a href='#snippet-preservetransparency' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
+## PageDimensions
+
+<!-- snippet: PageDimensions -->
+<a id='snippet-pagedimensions'></a>
+```cs
+[Test]
+public Task VerifyPageDimensions()
+{
+    return Verifier.VerifyFile("sample.pdf");
+}
+```
+<sup><a href='/src/Tests/Samples.cs#L31-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-pagedimensions' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 
 ## File Samples
