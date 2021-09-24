@@ -33,7 +33,7 @@ public static class ModuleInitializer
     public static void Initialize()
     {
         VerifyDocNet.Initialize();
-        VerifyImageMagick.RegisterComparers(threshold: 0.05, ImageMagick.ErrorMetric.PerceptualHash);
+        VerifyImageMagick.RegisterComparers(threshold: 0.13, ImageMagick.ErrorMetric.PerceptualHash);
     }
 }
 ```
@@ -50,10 +50,11 @@ public static class ModuleInitializer
 public Task VerifyPdf()
 {
     return Verifier.VerifyFile("sample.pdf")
+        .PreserveTransparency()
         .PageDimensions(new(1080, 1920));
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L10-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdf' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L10-L20' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdf' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -70,7 +71,7 @@ public Task VerifyPdfStream()
         .PageDimensions(new(1080, 1920));
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L21-L31' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdfstream' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L22-L32' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdfstream' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

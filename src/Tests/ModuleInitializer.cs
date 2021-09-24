@@ -7,6 +7,6 @@ public static class ModuleInitializer
     public static void Initialize()
     {
         VerifyDocNet.Initialize();
-        VerifyImageMagick.RegisterComparers(threshold: 0.05, ImageMagick.ErrorMetric.PerceptualHash);
+        VerifyImageMagick.RegisterComparers(threshold: 0.13, ImageMagick.ErrorMetric.PerceptualHash);
     }
 }

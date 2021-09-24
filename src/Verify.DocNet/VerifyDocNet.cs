@@ -54,5 +54,26 @@ namespace VerifyTests
 
             return pageDimensions;
         }
+
+        public static void PreserveTransparency(this VerifySettings settings)
+        {
+            settings.Context["VerifyDocNetPreserveTransparency"] = true;
+        }
+
+        public static SettingsTask PreserveTransparency(this SettingsTask settings)
+        {
+            settings.CurrentSettings.PreserveTransparency();
+            return settings;
+        }
+
+        static bool GetPreserveTransparency(this IReadOnlyDictionary<string, object> settings, bool preserveTransparency)
+        {
+            if (settings.TryGetValue("VerifyDocNetPreserveTransparency", out var value))
+            {
+                return (bool)value;
+            }
+
+            return preserveTransparency;
+        }
     }
 }

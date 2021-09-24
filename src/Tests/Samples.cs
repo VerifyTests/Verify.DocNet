@@ -13,6 +13,7 @@ public class Samples
     public Task VerifyPdf()
     {
         return Verifier.VerifyFile("sample.pdf")
+            .PreserveTransparency()
             .PageDimensions(new(1080, 1920));
     }
 
