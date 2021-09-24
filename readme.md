@@ -68,7 +68,7 @@ public Task VerifyPdfStream()
         .UseExtension("pdf");
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L41-L50' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdfstream' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L42-L51' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdfstream' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -103,10 +103,11 @@ public Task VerifyPreserveTransparency()
 [Test]
 public Task VerifyPageDimensions()
 {
-    return Verifier.VerifyFile("sample.pdf");
+    return Verifier.VerifyFile("sample.pdf")
+        .PageDimensions(new(1080, 1920));
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L31-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-pagedimensions' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L31-L40' title='Snippet source file'>snippet source</a> | <a href='#snippet-pagedimensions' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
