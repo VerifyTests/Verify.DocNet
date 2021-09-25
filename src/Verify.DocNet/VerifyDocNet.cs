@@ -66,14 +66,14 @@ namespace VerifyTests
             return settings;
         }
 
-        static bool GetPreserveTransparency(this IReadOnlyDictionary<string, object> settings, bool preserveTransparency)
+        static bool GetPreserveTransparency(this IReadOnlyDictionary<string, object> settings)
         {
             if (settings.TryGetValue("VerifyDocNetPreserveTransparency", out var value))
             {
                 return (bool)value;
             }
 
-            return preserveTransparency;
+            return false;
         }
     }
 }

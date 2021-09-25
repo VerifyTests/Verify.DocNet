@@ -31,7 +31,7 @@ namespace VerifyTests
         static IEnumerable<Target> GetStreams(IDocReader document, IReadOnlyDictionary<string, object> settings)
         {
             var pagesToInclude = settings.GetPagesToInclude(document.GetPageCount());
-            var preserveTransparency = settings.GetPreserveTransparency(false);
+            var preserveTransparency = settings.GetPreserveTransparency();
             for (var index = 0; index < pagesToInclude; index++)
             {
                 using var reader = document.GetPageReader(index);
