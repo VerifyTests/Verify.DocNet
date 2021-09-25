@@ -26,7 +26,7 @@ namespace VerifyTests
             return new(null, targets);
         }
 
-        static readonly NaiveTransparencyRemover TransparencyRemover = new();
+        static NaiveTransparencyRemover transparencyRemover = new();
 
         static IEnumerable<Target> GetStreams(IDocReader document, IReadOnlyDictionary<string, object> settings)
         {
@@ -36,7 +36,7 @@ namespace VerifyTests
             {
                 using var reader = document.GetPageReader(index);
 
-                var rawBytes = preserveTransparency ? reader.GetImage() : reader.GetImage(TransparencyRemover);
+                var rawBytes = preserveTransparency ? reader.GetImage() : reader.GetImage(transparencyRemover);
 
                 var width = reader.GetPageWidth();
                 var height = reader.GetPageHeight();
