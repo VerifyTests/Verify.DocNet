@@ -5,7 +5,7 @@
 
 Extends [Verify](https://github.com/VerifyTests/Verify) to allow verification of documents via [DocNet](https://github.com/GowenGit/docnet).
 
-Converts documents pdf to png for verification.
+Converts pdf documents to png for verification.
 
 <a href='https://dotnetfoundation.org' alt='Part of the .NET Foundation'><img src='https://raw.githubusercontent.com/VerifyTests/Verify/master/docs/dotNetFoundation.svg' height='30px'></a><br>
 Part of the <a href='https://dotnetfoundation.org' alt=''>.NET Foundation</a>
