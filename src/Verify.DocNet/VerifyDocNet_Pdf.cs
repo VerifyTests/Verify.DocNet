@@ -1,51 +1,47 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Docnet.Core;
+﻿using Docnet.Core;
 using Docnet.Core.Converters;
 using Docnet.Core.Readers;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace VerifyTests
+namespace VerifyTests;
+
+public static partial class VerifyDocNet
 {
-    public static partial class VerifyDocNet
+    static ConversionResult Convert(Stream stream, IReadOnlyDictionary<string, object> settings)
     {
-        static ConversionResult Convert(Stream stream, IReadOnlyDictionary<string, object> settings)
+        var pageDimensions = settings.GetPageDimensions(new(scalingFactor: 2));
+        var reader = DocLib.Instance.GetDocReader(stream.ToBytes(), pageDimensions);
+
+        return Convert(reader, settings);
+    }
+
+    static ConversionResult Convert(IDocReader document, IReadOnlyDictionary<string, object> settings)
+    {
+        var targets = GetStreams(document, settings).ToList();
+        return new(null, targets);
+    }
+
+    static NaiveTransparencyRemover transparencyRemover = new();
+
+    static IEnumerable<Target> GetStreams(IDocReader document, IReadOnlyDictionary<string, object> settings)
+    {
+        var pagesToInclude = settings.GetPagesToInclude(document.GetPageCount());
+        var preserveTransparency = settings.GetPreserveTransparency();
+        for (var index = 0; index < pagesToInclude; index++)
         {
-            var pageDimensions = settings.GetPageDimensions(new(scalingFactor: 2));
-            IDocReader reader = DocLib.Instance.GetDocReader(stream.ToBytes(), pageDimensions);
+            using var reader = document.GetPageReader(index);
 
-            return Convert(reader, settings);
-        }
+            var rawBytes = preserveTransparency ? reader.GetImage() : reader.GetImage(transparencyRemover);
 
-        static ConversionResult Convert(IDocReader document, IReadOnlyDictionary<string, object> settings)
-        {
-            var targets = GetStreams(document, settings).ToList();
-            return new(null, targets);
-        }
+            var width = reader.GetPageWidth();
+            var height = reader.GetPageHeight();
 
-        static NaiveTransparencyRemover transparencyRemover = new();
+            var image = Image.LoadPixelData<Bgra32>(rawBytes, width, height);
 
-        static IEnumerable<Target> GetStreams(IDocReader document, IReadOnlyDictionary<string, object> settings)
-        {
-            var pagesToInclude = settings.GetPagesToInclude(document.GetPageCount());
-            var preserveTransparency = settings.GetPreserveTransparency();
-            for (var index = 0; index < pagesToInclude; index++)
-            {
-                using var reader = document.GetPageReader(index);
-
-                var rawBytes = preserveTransparency ? reader.GetImage() : reader.GetImage(transparencyRemover);
-
-                var width = reader.GetPageWidth();
-                var height = reader.GetPageHeight();
-
-                var image = Image.LoadPixelData<Bgra32>(rawBytes, width, height);
-
-                var stream = new MemoryStream();
-                image.SaveAsPng(stream);
-                yield return new("png", stream);
-            }
+            var stream = new MemoryStream();
+            image.SaveAsPng(stream);
+            yield return new("png", stream);
         }
     }
 }

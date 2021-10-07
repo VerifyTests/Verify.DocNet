@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-using VerifyNUnit;
+﻿using VerifyNUnit;
 using NUnit.Framework;
 using VerifyTests;
 
