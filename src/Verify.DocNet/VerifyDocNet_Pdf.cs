@@ -11,7 +11,7 @@ public static partial class VerifyDocNet
     static ConversionResult Convert(Stream stream, IReadOnlyDictionary<string, object> settings)
     {
         var pageDimensions = settings.GetPageDimensions(new(scalingFactor: 2));
-        var reader = DocLib.Instance.GetDocReader(stream.ToBytes(), pageDimensions);
+        using var reader = DocLib.Instance.GetDocReader(stream.ToBytes(), pageDimensions);
 
         return Convert(reader, settings);
     }
