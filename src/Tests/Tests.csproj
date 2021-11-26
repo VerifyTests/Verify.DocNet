@@ -11,7 +11,7 @@
     <PackageReference Include="NUnit3TestAdapter" Version="4.1.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
     <PackageReference Include="Verify.ImageMagick" Version="2.11.1" />
-    <PackageReference Include="Verify.NUnit" Version="14.6.0" />
+    <PackageReference Include="Verify.NUnit" Version="14.6.4" />
     <ProjectReference Include="..\Verify.DocNet\Verify.DocNet.csproj" />
     <PackageReference Include="ProjectDefaults" Version="1.0.61" PrivateAssets="All" />
 
