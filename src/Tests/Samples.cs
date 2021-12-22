@@ -10,7 +10,7 @@ public class Samples
     [Test]
     public Task VerifyPdf()
     {
-        return Verifier.VerifyFile("sample.pdf");
+        return VerifyFile("sample.pdf");
     }
 
     #endregion
@@ -20,7 +20,7 @@ public class Samples
     [Test]
     public Task VerifyPreserveTransparency()
     {
-        return Verifier.VerifyFile("sample.pdf")
+        return VerifyFile("sample.pdf")
             .PreserveTransparency();
     }
 
@@ -31,7 +31,7 @@ public class Samples
     [Test]
     public Task VerifyPageDimensions()
     {
-        return Verifier.VerifyFile("sample.pdf")
+        return VerifyFile("sample.pdf")
             .PageDimensions(new(1080, 1920));
     }
 
@@ -42,7 +42,7 @@ public class Samples
     [Test]
     public Task VerifyPdfStream()
     {
-        return Verifier.Verify(File.OpenRead("sample.pdf"))
+        return Verify(File.OpenRead("sample.pdf"))
             .UseExtension("pdf");
     }
 
