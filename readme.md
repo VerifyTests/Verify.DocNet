@@ -52,7 +52,7 @@ public static class ModuleInitializer
 [Test]
 public Task VerifyPdf()
 {
-    return Verifier.VerifyFile("sample.pdf");
+    return VerifyFile("sample.pdf");
 }
 ```
 <sup><a href='/src/Tests/Samples.cs#L8-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdf' title='Start of snippet'>anchor</a></sup>
@@ -67,7 +67,7 @@ public Task VerifyPdf()
 [Test]
 public Task VerifyPdfStream()
 {
-    return Verifier.Verify(File.OpenRead("sample.pdf"))
+    return Verify(File.OpenRead("sample.pdf"))
         .UseExtension("pdf");
 }
 ```
@@ -90,7 +90,7 @@ public Task VerifyPdfStream()
 [Test]
 public Task VerifyPreserveTransparency()
 {
-    return Verifier.VerifyFile("sample.pdf")
+    return VerifyFile("sample.pdf")
         .PreserveTransparency();
 }
 ```
@@ -106,7 +106,7 @@ public Task VerifyPreserveTransparency()
 [Test]
 public Task VerifyPageDimensions()
 {
-    return Verifier.VerifyFile("sample.pdf")
+    return VerifyFile("sample.pdf")
         .PageDimensions(new(1080, 1920));
 }
 ```
