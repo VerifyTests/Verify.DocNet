@@ -1,8 +1,4 @@
-﻿using VerifyNUnit;
-using NUnit.Framework;
-using VerifyTests;
-
-[TestFixture]
+﻿[TestFixture]
 public class Samples
 {
     #region VerifyPdf

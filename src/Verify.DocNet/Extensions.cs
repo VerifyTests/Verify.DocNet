@@ -4,7 +4,7 @@
     {
         if (stream is MemoryStream memoryStream1)
         {
-            return memoryStream1.ToArray();                
+            return memoryStream1.ToArray();
         }
 
         using var memoryStream2 = new MemoryStream();
