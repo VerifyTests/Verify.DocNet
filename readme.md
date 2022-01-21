@@ -26,8 +26,6 @@ https://nuget.org/packages/Verify.DocNet/
 <!-- snippet: ModuleInitializer.cs -->
 <a id='snippet-ModuleInitializer.cs'></a>
 ```cs
-using VerifyTests;
-
 public static class ModuleInitializer
 {
     [ModuleInitializer]
@@ -38,7 +36,7 @@ public static class ModuleInitializer
     }
 }
 ```
-<sup><a href='/src/Tests/ModuleInitializer.cs#L1-L11' title='Snippet source file'>snippet source</a> | <a href='#snippet-ModuleInitializer.cs' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/ModuleInitializer.cs#L1-L9' title='Snippet source file'>snippet source</a> | <a href='#snippet-ModuleInitializer.cs' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `VerifyImageMagick.RegisterComparers` (provided by https://github.com/VerifyTests/Verify.ImageMagick) allows minor image changes to be ignored.
@@ -55,7 +53,7 @@ public Task VerifyPdf()
     return VerifyFile("sample.pdf");
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L8-L16' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdf' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L4-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdf' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -71,7 +69,7 @@ public Task VerifyPdfStream()
         .UseExtension("pdf");
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L40-L49' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdfstream' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L36-L45' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdfstream' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -94,7 +92,7 @@ public Task VerifyPreserveTransparency()
         .PreserveTransparency();
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L18-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-preservetransparency' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L14-L23' title='Snippet source file'>snippet source</a> | <a href='#snippet-preservetransparency' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -110,7 +108,7 @@ public Task VerifyPageDimensions()
         .PageDimensions(new(1080, 1920));
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L29-L38' title='Snippet source file'>snippet source</a> | <a href='#snippet-pagedimensions' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L25-L34' title='Snippet source file'>snippet source</a> | <a href='#snippet-pagedimensions' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
