@@ -11,10 +11,8 @@ public static partial class VerifyDocNet
         VerifierSettings.RegisterFileConverter<IDocReader>(Convert);
     }
 
-    public static void PagesToInclude(this VerifySettings settings, int count)
-    {
+    public static void PagesToInclude(this VerifySettings settings, int count) =>
         settings.Context["VerifyDocNetPagesToInclude"] = count;
-    }
 
     public static SettingsTask PagesToInclude(this SettingsTask settings, int count)
     {
@@ -32,10 +30,8 @@ public static partial class VerifyDocNet
         return count;
     }
 
-    public static void PageDimensions(this VerifySettings settings, PageDimensions pageDimensions)
-    {
+    public static void PageDimensions(this VerifySettings settings, PageDimensions pageDimensions) =>
         settings.Context["VerifyDocNetPageDimensions"] = pageDimensions;
-    }
 
     public static SettingsTask PageDimensions(this SettingsTask settings, PageDimensions pageDimensions)
     {
@@ -53,10 +49,8 @@ public static partial class VerifyDocNet
         return pageDimensions;
     }
 
-    public static void PreserveTransparency(this VerifySettings settings)
-    {
+    public static void PreserveTransparency(this VerifySettings settings) =>
         settings.Context["VerifyDocNetPreserveTransparency"] = true;
-    }
 
     public static SettingsTask PreserveTransparency(this SettingsTask settings)
     {
