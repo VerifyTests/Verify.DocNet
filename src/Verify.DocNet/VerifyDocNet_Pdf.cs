@@ -41,7 +41,7 @@ public static partial class VerifyDocNet
 
             var stream = new MemoryStream();
             image.SaveAsPng(stream);
-            yield return new("png", stream);
+            yield return new("png", stream, null);
         }
     }
 }
