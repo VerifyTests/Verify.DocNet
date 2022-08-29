@@ -21,20 +21,18 @@ https://nuget.org/packages/Verify.DocNet/
 
 ### Enable Verify.DocNet
 
-<!-- snippet: ModuleInitializer.cs -->
-<a id='snippet-ModuleInitializer.cs'></a>
+<!-- snippet: enable -->
+<a id='snippet-enable'></a>
 ```cs
-public static class ModuleInitializer
+[ModuleInitializer]
+public static void Initialize()
 {
-    [ModuleInitializer]
-    public static void Initialize()
-    {
-        VerifyDocNet.Initialize();
-        VerifyImageMagick.RegisterComparers(threshold: 0.13, ImageMagick.ErrorMetric.PerceptualHash);
-    }
-}
+    VerifyDocNet.Initialize();
+    VerifyImageMagick.RegisterComparers(
+        threshold: 0.13,
+        ImageMagick.ErrorMetric.PerceptualHash);
 ```
-<sup><a href='/src/Tests/ModuleInitializer.cs#L1-L9' title='Snippet source file'>snippet source</a> | <a href='#snippet-ModuleInitializer.cs' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/ModuleInitializer.cs#L3-L13' title='Snippet source file'>snippet source</a> | <a href='#snippet-enable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `VerifyImageMagick.RegisterComparers` (provided by https://github.com/VerifyTests/Verify.ImageMagick) allows minor image changes to be ignored.
