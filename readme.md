@@ -57,11 +57,13 @@ public Task VerifyPdf() =>
 <a id='snippet-verifypdfstream'></a>
 ```cs
 [Test]
-public Task VerifyPdfStream() =>
-    Verify(File.OpenRead("sample.pdf"))
-        .UseExtension("pdf");
+public Task VerifyPdfStream()
+{
+    var stream =  new MemoryStream(File.ReadAllBytes("sample.pdf"));
+    return Verify(stream, "pdf");
+}
 ```
-<sup><a href='/src/Tests/Samples.cs#L30-L37' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdfstream' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L30-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdfstream' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 

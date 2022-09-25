@@ -30,9 +30,11 @@ public class Samples
     #region VerifyPdfStream
 
     [Test]
-    public Task VerifyPdfStream() =>
-        Verify(File.OpenRead("sample.pdf"))
-            .UseExtension("pdf");
+    public Task VerifyPdfStream()
+    {
+        var stream =  new MemoryStream(File.ReadAllBytes("sample.pdf"));
+        return Verify(stream, "pdf");
+    }
 
     #endregion
 }
