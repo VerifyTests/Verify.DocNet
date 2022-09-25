@@ -32,7 +32,7 @@ public class Samples
     [Test]
     public Task VerifyPdfStream()
     {
-        var stream =  new MemoryStream(File.ReadAllBytes("sample.pdf"));
+        var stream = new MemoryStream(File.ReadAllBytes("sample.pdf"));
         return Verify(stream, "pdf");
     }
 
