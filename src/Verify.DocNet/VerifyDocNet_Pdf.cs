@@ -1,4 +1,4 @@
-﻿using Docnet.Core;
+using Docnet.Core;
 using Docnet.Core.Converters;
 using Docnet.Core.Readers;
 using SixLabors.ImageSharp;
@@ -26,9 +26,24 @@ public static partial class VerifyDocNet
 
     static IEnumerable<Target> GetStreams(IDocReader document, IReadOnlyDictionary<string, object> settings)
     {
-        var pagesToInclude = settings.GetPagesToInclude(document.GetPageCount());
+        var numberOfPages = document.GetPageCount();
+        var pagesToInclude = settings.GetPagesToInclude(numberOfPages);
+
+        var start = 0;
+        var singlePage = settings.GetSinglePage();
+        if (singlePage != -1)
+        {
+            if (singlePage >= numberOfPages)
+            {
+                throw new ArgumentOutOfRangeException("singlePage", singlePage, $"Cannot Verify Page {singlePage} (0-based index) document containts only {numberOfPages} Page(s).");
+            }
+
+            start = singlePage;
+            pagesToInclude = singlePage + 1;
+        }
+
         var preserveTransparency = settings.GetPreserveTransparency();
-        for (var index = 0; index < pagesToInclude; index++)
+        for (var index = start; index < pagesToInclude; index++)
         {
             using var reader = document.GetPageReader(index);
 

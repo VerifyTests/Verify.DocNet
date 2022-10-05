@@ -1,4 +1,4 @@
-﻿[TestFixture]
+[TestFixture]
 public class Samples
 {
     #region VerifyPdf
@@ -37,4 +37,23 @@ public class Samples
     }
 
     #endregion
+
+    #region VerifySinglePage
+
+    [Test]
+    public Task VerifyFirstPage()
+    {
+        var stream = new MemoryStream(File.ReadAllBytes("sample.pdf"));
+        return Verify(stream, "pdf").SinglePage(0);
+    }
+
+    [Test]
+    public Task VerifySecondPage()
+    {
+        var stream = new MemoryStream(File.ReadAllBytes("sample.pdf"));
+        return Verify(stream, "pdf").SinglePage(1);
+    }
+
+    #endregion
+
 }

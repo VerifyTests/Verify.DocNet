@@ -1,4 +1,4 @@
-﻿using Docnet.Core.Models;
+using Docnet.Core.Models;
 using Docnet.Core.Readers;
 
 namespace VerifyTests;
@@ -28,6 +28,31 @@ public static partial class VerifyDocNet
         }
 
         return count;
+    }
+
+    public static void SinglePage(this VerifySettings settings, int index) =>
+      settings.Context["VerifyDocNetSinglePage"] = index;
+
+    /// <summary>
+    /// Zero based index of single page to include (overrules PagesToInclude when in range)
+    /// </summary>
+    /// <param name="settings"></param>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public static SettingsTask SinglePage(this SettingsTask settings, int index)
+    {
+        settings.CurrentSettings.SinglePage(index);
+        return settings;
+    }
+
+    static int GetSinglePage(this IReadOnlyDictionary<string, object> settings)
+    {
+        if (settings.TryGetValue("VerifyDocNetSinglePage", out var value))
+        {
+            return (int)value;
+        }
+
+        return -1;
     }
 
     public static void PageDimensions(this VerifySettings settings, PageDimensions pageDimensions) =>
