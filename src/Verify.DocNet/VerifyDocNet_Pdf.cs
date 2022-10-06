@@ -30,12 +30,11 @@ public static partial class VerifyDocNet
         var pagesToInclude = settings.GetPagesToInclude(numberOfPages);
 
         var start = 0;
-        var singlePage = settings.GetSinglePage();
-        if (singlePage != -1)
+        if (settings.TryGetSinglePage(out var singlePage))
         {
             if (singlePage >= numberOfPages)
             {
-                throw new ArgumentOutOfRangeException("singlePage", singlePage, $"Cannot Verify Page {singlePage} (0-based index) document containts only {numberOfPages} Page(s).");
+                throw new ($"Cannot Verify Page {singlePage} (0-based index) document contains only {numberOfPages} Page(s).");
             }
 
             start = singlePage;

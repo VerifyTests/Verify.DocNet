@@ -45,14 +45,16 @@ public static partial class VerifyDocNet
         return settings;
     }
 
-    static int GetSinglePage(this IReadOnlyDictionary<string, object> settings)
+    static bool TryGetSinglePage(this IReadOnlyDictionary<string, object> settings, out int singlePage)
     {
         if (settings.TryGetValue("VerifyDocNetSinglePage", out var value))
         {
-            return (int)value;
+            singlePage = (int)value;
+            return true;
         }
 
-        return -1;
+        singlePage = 0;
+        return false;
     }
 
     public static void PageDimensions(this VerifySettings settings, PageDimensions pageDimensions) =>
