@@ -101,6 +101,27 @@ public Task VerifyPageDimensions() =>
 <sup><a href='/src/Tests/Samples.cs#L21-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-pagedimensions' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
+## VerifySinglePage
+
+<!-- snippet: VerifySinglePage -->
+<a id='snippet-verifysinglepage'></a>
+```cs
+[Test]
+public Task VerifyFirstPage()
+{
+    var stream = new MemoryStream(File.ReadAllBytes("sample.pdf"));
+    return Verify(stream, "pdf").SinglePage(0);
+}
+
+[Test]
+public Task VerifySecondPage()
+{
+    var stream = new MemoryStream(File.ReadAllBytes("sample.pdf"));
+    return Verify(stream, "pdf").SinglePage(1);
+}
+```
+<sup><a href='/src/Tests/Samples.cs#L41-L57' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifysinglepage' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
 
 ## File Samples
 
