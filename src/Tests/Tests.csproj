@@ -12,7 +12,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="Verify.DiffPlex" Version="2.0.0-beta.3" />
     <PackageReference Include="Verify.ImageMagick" Version="3.0.0-beta.3" />
-    <PackageReference Include="Verify.NUnit" Version="18.0.0-beta.23" />
+    <PackageReference Include="Verify.NUnit" Version="18.0.0-beta.25" />
     <ProjectReference Include="..\Verify.DocNet\Verify.DocNet.csproj" />
     <PackageReference Include="ProjectDefaults" Version="1.0.80" PrivateAssets="all" />
 
