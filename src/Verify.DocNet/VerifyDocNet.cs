@@ -7,6 +7,7 @@ public static partial class VerifyDocNet
 {
     public static void Initialize()
     {
+        InnerVerifier.ThrowIfVerifyHasBeenRun();
         VerifierSettings.RegisterFileConverter("pdf", Convert);
         VerifierSettings.RegisterFileConverter<IDocReader>(Convert);
     }
