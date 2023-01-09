@@ -9,9 +9,11 @@
         VerifyImageMagick.RegisterComparers(
             threshold: 0.13,
             ImageMagick.ErrorMetric.PerceptualHash);
-
-        #endregion
-
-        VerifyDiffPlex.Initialize();
     }
+
+    #endregion
+
+    [ModuleInitializer]
+    public static void InitializeOther() =>
+        VerifyDiffPlex.Initialize();
 }
