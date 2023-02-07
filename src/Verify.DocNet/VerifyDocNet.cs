@@ -14,6 +14,8 @@ public static partial class VerifyDocNet
             throw new("Already Initialized");
         }
 
+        Initialized = true;
+
         InnerVerifier.ThrowIfVerifyHasBeenRun();
         VerifierSettings.RegisterFileConverter("pdf", Convert);
         VerifierSettings.RegisterFileConverter<IDocReader>(Convert);
