@@ -5,8 +5,15 @@ namespace VerifyTests;
 
 public static partial class VerifyDocNet
 {
+    public static bool Initialized { get; private set; }
+
     public static void Initialize()
     {
+        if (Initialized)
+        {
+            throw new("Already Initialized");
+        }
+
         InnerVerifier.ThrowIfVerifyHasBeenRun();
         VerifierSettings.RegisterFileConverter("pdf", Convert);
         VerifierSettings.RegisterFileConverter<IDocReader>(Convert);
