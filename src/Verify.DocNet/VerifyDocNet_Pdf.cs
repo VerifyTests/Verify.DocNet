@@ -1,8 +1,6 @@
 using Docnet.Core;
 using Docnet.Core.Converters;
 using Docnet.Core.Readers;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 
 namespace VerifyTests;
 
