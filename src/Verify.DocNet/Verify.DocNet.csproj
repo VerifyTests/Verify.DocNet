@@ -4,7 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Argon" Version="0.7.2" />
-    <PackageReference Include="Docnet.Core" Version="2.3.1" />
+    <PackageReference Include="Docnet.Core" Version="2.6.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
     <PackageReference Include="Verify" Version="21.0.0" />
     <PackageReference Include="ProjectDefaults" Version="1.0.93" PrivateAssets="all" />
