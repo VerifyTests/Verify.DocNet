@@ -8,5 +8,6 @@
     <SignAssembly>false</SignAssembly>
     <PackageTags>DocNet, pdf, Verify</PackageTags>
     <Description>Extends Verify (https://github.com/VerifyTests/Verify) to allow verification via DocNet.</Description>
+    <ResolveAssemblyReferencesSilent>true</ResolveAssemblyReferencesSilent>
   </PropertyGroup>
 </Project>
