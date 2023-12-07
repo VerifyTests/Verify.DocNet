@@ -13,7 +13,6 @@ Converts pdf documents to png for verification.
 This library uses [SixLabors ImageSharp](https://github.com/SixLabors/ImageSharp) for png generation. For commercial application support visit [SixLabors/Pricing](https://sixlabors.com/pricing/).
 
 
-
 ## NuGet package
 
 https://nuget.org/packages/Verify.DocNet/
