@@ -13,7 +13,7 @@
     <PackageReference Include="Verify.ImageMagick" Version="3.2.2" />
     <PackageReference Include="Verify.NUnit" Version="22.8.0" />
     <ProjectReference Include="..\Verify.DocNet\Verify.DocNet.csproj" />
-    <PackageReference Include="ProjectDefaults" Version="1.0.106" PrivateAssets="all" />
+    <PackageReference Include="ProjectDefaults" Version="1.0.107" PrivateAssets="all" />
 
     <None Update="sample.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
