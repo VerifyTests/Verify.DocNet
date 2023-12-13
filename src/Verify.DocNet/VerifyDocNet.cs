@@ -1,5 +1,4 @@
 using Docnet.Core.Models;
-using Docnet.Core.Readers;
 
 namespace VerifyTests;
 

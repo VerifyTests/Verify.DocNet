@@ -1,15 +1,11 @@
-using Docnet.Core;
-using Docnet.Core.Converters;
-using Docnet.Core.Readers;
-
 namespace VerifyTests;
 
 public static partial class VerifyDocNet
 {
     static ConversionResult Convert(Stream stream, IReadOnlyDictionary<string, object> settings)
     {
-        var pageDimensions = settings.GetPageDimensions(new(scalingFactor: 2));
-        using var reader = DocLib.Instance.GetDocReader(stream.ToBytes(), pageDimensions);
+        var dimensions = settings.GetPageDimensions(new(scalingFactor: 2));
+        using var reader = DocLib.Instance.GetDocReader(stream.ToBytes(), dimensions);
 
         return Convert(reader, settings);
     }
@@ -44,7 +40,9 @@ public static partial class VerifyDocNet
         {
             using var reader = document.GetPageReader(index);
 
-            var rawBytes = preserveTransparency ? reader.GetImage() : reader.GetImage(transparencyRemover);
+            var rawBytes = preserveTransparency ?
+                reader.GetImage() :
+                reader.GetImage(transparencyRemover);
 
             var width = reader.GetPageWidth();
             var height = reader.GetPageHeight();
