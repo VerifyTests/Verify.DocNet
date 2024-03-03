@@ -72,9 +72,9 @@ public Task VerifyPdfStream()
 
 ### Result
 
-[Samples.VerifyPdf.01.verified.png](/src/Tests/Samples.VerifyPdf#00.verified.png):
+[Samples.VerifyPdf#01.verified.png](/src/Tests/Samples.VerifyPdf%2300.verified.png):
 
-<img src="/src/Tests/Samples.VerifyPdf#00.verified.png" width="200px">
+<img src="/src/Tests/Samples.VerifyPdf%2300.verified.png" width="200px">
 
 
 ## PreserveTransparency
