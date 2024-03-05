@@ -32,7 +32,7 @@ public class Samples
     [Test]
     public Task VerifyPdfStream()
     {
-        var stream = new MemoryStream(File.ReadAllBytes("sample.pdf"));
+        var stream = File.OpenRead("sample.pdf");
         return Verify(stream, "pdf");
     }
 
@@ -43,14 +43,14 @@ public class Samples
     [Test]
     public Task VerifyFirstPage()
     {
-        var stream = new MemoryStream(File.ReadAllBytes("sample.pdf"));
+        var stream = File.OpenRead("sample.pdf");
         return Verify(stream, "pdf").SinglePage(0);
     }
 
     [Test]
     public Task VerifySecondPage()
     {
-        var stream = new MemoryStream(File.ReadAllBytes("sample.pdf"));
+        var stream = File.OpenRead("sample.pdf");
         return Verify(stream, "pdf").SinglePage(1);
     }
 
