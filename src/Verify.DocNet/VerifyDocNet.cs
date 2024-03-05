@@ -45,9 +45,6 @@ public static partial class VerifyDocNet
     /// <summary>
     /// Zero based index of single page to include (overrules PagesToInclude when in range)
     /// </summary>
-    /// <param name="settings"></param>
-    /// <param name="index"></param>
-    /// <returns></returns>
     public static SettingsTask SinglePage(this SettingsTask settings, int index)
     {
         settings.CurrentSettings.SinglePage(index);
