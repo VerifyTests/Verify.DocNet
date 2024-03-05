@@ -1,3 +1,5 @@
+using Docnet.Core.Models;
+
 namespace VerifyTests;
 
 public static partial class VerifyDocNet
