@@ -44,20 +44,20 @@ public static void Initialize()
 ### Verify a file
 
 <!-- snippet: VerifyPdf -->
-<a id='snippet-verifypdf'></a>
+<a id='snippet-VerifyPdf'></a>
 ```cs
 [Test]
 public Task VerifyPdf() =>
     VerifyFile("sample.pdf");
 ```
-<sup><a href='/src/Tests/Samples.cs#L4-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdf' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L4-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyPdf' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
 ### Verify a Stream
 
 <!-- snippet: VerifyPdfStream -->
-<a id='snippet-verifypdfstream'></a>
+<a id='snippet-VerifyPdfStream'></a>
 ```cs
 [Test]
 public Task VerifyPdfStream()
@@ -66,7 +66,7 @@ public Task VerifyPdfStream()
     return Verify(stream, "pdf");
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L30-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifypdfstream' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L30-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyPdfStream' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -80,34 +80,34 @@ public Task VerifyPdfStream()
 ## PreserveTransparency
 
 <!-- snippet: PreserveTransparency -->
-<a id='snippet-preservetransparency'></a>
+<a id='snippet-PreserveTransparency'></a>
 ```cs
 [Test]
 public Task VerifyPreserveTransparency() =>
     VerifyFile("sample.pdf")
         .PreserveTransparency();
 ```
-<sup><a href='/src/Tests/Samples.cs#L12-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-preservetransparency' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L12-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-PreserveTransparency' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
 ## PageDimensions
 
 <!-- snippet: PageDimensions -->
-<a id='snippet-pagedimensions'></a>
+<a id='snippet-PageDimensions'></a>
 ```cs
 [Test]
 public Task VerifyPageDimensions() =>
     VerifyFile("sample.pdf")
         .PageDimensions(new(1080, 1920));
 ```
-<sup><a href='/src/Tests/Samples.cs#L21-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-pagedimensions' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L21-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-PageDimensions' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## VerifySinglePage
 
 <!-- snippet: VerifySinglePage -->
-<a id='snippet-verifysinglepage'></a>
+<a id='snippet-VerifySinglePage'></a>
 ```cs
 [Test]
 public Task VerifyFirstPage()
@@ -123,7 +123,7 @@ public Task VerifySecondPage()
     return Verify(stream, "pdf").SinglePage(1);
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L41-L57' title='Snippet source file'>snippet source</a> | <a href='#snippet-verifysinglepage' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L41-L57' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifySinglePage' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## File Samples
