@@ -2,23 +2,23 @@ namespace VerifyTests;
 
 public static partial class VerifyDocNet
 {
-    static ConversionResult Convert(Stream stream, IReadOnlyDictionary<string, object> settings)
+    static ConversionResult Convert(string? name, Stream stream, IReadOnlyDictionary<string, object> settings)
     {
         var dimensions = settings.GetPageDimensions(new(scalingFactor: 2));
         using var reader = DocLib.Instance.GetDocReader(stream.ToBytes(), dimensions);
 
-        return Convert(reader, settings);
+        return Convert(name, reader, settings);
     }
 
-    static ConversionResult Convert(IDocReader document, IReadOnlyDictionary<string, object> settings)
+    static ConversionResult Convert(string? name, IDocReader document, IReadOnlyDictionary<string, object> settings)
     {
-        var targets = GetStreams(document, settings).ToList();
+        var targets = GetStreams(name, document, settings).ToList();
         return new(null, targets);
     }
 
     static NaiveTransparencyRemover transparencyRemover = new();
 
-    static IEnumerable<Target> GetStreams(IDocReader document, IReadOnlyDictionary<string, object> settings)
+    static IEnumerable<Target> GetStreams(string? name, IDocReader document, IReadOnlyDictionary<string, object> settings)
     {
         var numberOfPages = document.GetPageCount();
         var pagesToInclude = settings.GetPagesToInclude(numberOfPages);
@@ -51,7 +51,7 @@ public static partial class VerifyDocNet
 
             var stream = new MemoryStream();
             image.SaveAsPng(stream);
-            yield return new("png", stream);
+            yield return new("png", stream, name);
         }
     }
 }
