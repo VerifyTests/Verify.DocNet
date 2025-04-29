@@ -14,8 +14,8 @@ public static partial class VerifyDocNet
         Initialized = true;
 
         InnerVerifier.ThrowIfVerifyHasBeenRun();
-        VerifierSettings.RegisterFileConverter("pdf", Convert);
-        VerifierSettings.RegisterFileConverter<IDocReader>(Convert);
+        VerifierSettings.RegisterStreamConverter("pdf", Convert);
+        VerifierSettings.RegisterFileConverter<IDocReader>((target, context) => Convert(null, target, context));
     }
 
     public static void PagesToInclude(this VerifySettings settings, int count) =>
