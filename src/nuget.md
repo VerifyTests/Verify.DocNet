@@ -1,8 +1,8 @@
-[Documentation](https://github.com/VerifyTests/Verify.DocNe)
+[Documentation](https://github.com/VerifyTests/Verify.DocNet)
 
 Extends [Verify](https://github.com/VerifyTests/Verify) to allow verification of documents via [DocNet](https://github.com/GowenGit/docnet).<!-- singleLineInclude: intro. path: /docs/intro.include.md -->
 
-**See [Milestones](https://github.com/VerifyTests/Verify.DocNe/milestones?state=closed) for release notes.**
+**See [Milestones](https://github.com/VerifyTests/Verify.DocNet/milestones?state=closed) for release notes.**
 
 
 ## Sponsors
@@ -12,4 +12,4 @@ Extends [Verify](https://github.com/VerifyTests/Verify) to allow verification of
 
 [Entity Framework Extensions](https://entityframework-extensions.net/?utm_source=simoncropp&utm_medium=Verify.DocNet) is a major sponsor and is proud to contribute to the development this project.
 
-[![Entity Framework Extensions](https://raw.githubusercontent.com/VerifyTests/Verify.DocNe/refs/heads/main/docs/zzz.png)](https://entityframework-extensions.net/?utm_source=simoncropp&utm_medium=Verify.DocNet)<!-- endInclude -->
+[![Entity Framework Extensions](https://raw.githubusercontent.com/VerifyTests/Verify.DocNet/refs/heads/main/docs/zzz.png)](https://entityframework-extensions.net/?utm_source=simoncropp&utm_medium=Verify.DocNet)<!-- endInclude -->
