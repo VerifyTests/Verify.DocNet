@@ -11,6 +11,11 @@
     <PackageReference Include="Verify.DiffPlex" />
     <PackageReference Include="Verify.ImageMagick" />
     <PackageReference Include="Verify.NUnit" />
+    <PackageReference Include="Argon" />
+    <PackageReference Include="DiffEngine" />
+    <PackageReference Include="EmptyFiles" />
+    <PackageReference Include="SimpleInfoName" />
+    <PackageReference Include="Verify" />
     <ProjectReference Include="..\Verify.DocNet\Verify.DocNet.csproj" />
     <PackageReference Include="ProjectDefaults" PrivateAssets="all" />
 
