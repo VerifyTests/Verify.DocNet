@@ -47,10 +47,8 @@ public static partial class VerifyDocNet
             var width = reader.GetPageWidth();
             var height = reader.GetPageHeight();
 
-            var image = Image.LoadPixelData<Bgra32>(rawBytes, width, height);
-
             var stream = new MemoryStream();
-            image.SaveAsPng(stream);
+            PngEncoder.WriteBgraAsPng(rawBytes, width, height, stream);
             yield return new("png", stream, name);
         }
     }

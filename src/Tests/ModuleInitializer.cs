@@ -8,7 +8,7 @@
         VerifyDocNet.Initialize();
         VerifyImageMagick.RegisterComparers(
             threshold: 0.13,
-            ImageMagick.ErrorMetric.PerceptualHash);
+            ErrorMetric.PerceptualHash);
     }
 
     #endregion

@@ -10,8 +10,6 @@ Extends [Verify](https://github.com/VerifyTests/Verify) to allow verification of
 **See [Milestones](../../milestones?state=closed) for release notes.**
 Converts pdf documents to png for verification.
 
-This library uses [SixLabors ImageSharp](https://github.com/SixLabors/ImageSharp) for png generation. For commercial application support visit [SixLabors/Pricing](https://sixlabors.com/pricing/).
-
 
 ## Sponsors
 
@@ -46,7 +44,7 @@ public static void Initialize()
     VerifyDocNet.Initialize();
     VerifyImageMagick.RegisterComparers(
         threshold: 0.13,
-        ImageMagick.ErrorMetric.PerceptualHash);
+        ErrorMetric.PerceptualHash);
 }
 ```
 <sup><a href='/src/Tests/ModuleInitializer.cs#L3-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-enable' title='Start of snippet'>anchor</a></sup>
