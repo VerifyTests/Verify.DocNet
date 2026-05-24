@@ -44,7 +44,7 @@ public static void Initialize()
     VerifyDocNet.Initialize();
     VerifyImageMagick.RegisterComparers(
         threshold: 0.13,
-        ImageMagick.ErrorMetric.PerceptualHash);
+        ErrorMetric.PerceptualHash);
 }
 ```
 <sup><a href='/src/Tests/ModuleInitializer.cs#L3-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-enable' title='Start of snippet'>anchor</a></sup>
