@@ -118,12 +118,9 @@ public class PngEncoderTests
 
         using var image = new MagickImage(Encode(bgra, width, height));
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(image.Format, Is.EqualTo(MagickFormat.Png));
-            Assert.That((int)image.Width, Is.EqualTo(width));
-            Assert.That((int)image.Height, Is.EqualTo(height));
-        });
+        Assert.That(image.Format, Is.EqualTo(MagickFormat.Png));
+        Assert.That((int)image.Width, Is.EqualTo(width));
+        Assert.That((int)image.Height, Is.EqualTo(height));
     }
 
     static byte[] Encode(byte[] bgra, int width, int height)
