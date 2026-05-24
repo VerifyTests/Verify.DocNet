@@ -1,6 +1,3 @@
-using System.Buffers.Binary;
-using System.IO.Compression;
-
 static class PngEncoder
 {
     static ReadOnlySpan<byte> Signature => [137, 80, 78, 71, 13, 10, 26, 10];

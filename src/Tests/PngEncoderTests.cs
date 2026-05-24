@@ -1,8 +1,3 @@
-using System.Buffers.Binary;
-using System.IO.Compression;
-using System.Text;
-using ImageMagick;
-
 [TestFixture]
 public class PngEncoderTests
 {
@@ -42,7 +37,7 @@ public class PngEncoderTests
             .Select(_ => _.type)
             .ToList();
 
-        Assert.That(types, Is.EqualTo(new[] { "IHDR", "IDAT", "IEND" }));
+        Assert.That(types, Is.EqualTo(["IHDR", "IDAT", "IEND"]));
     }
 
     [Test]
