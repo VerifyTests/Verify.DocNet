@@ -42,12 +42,10 @@ Converts pdf documents to png for verification.
 public static void Initialize()
 {
     VerifyDocNet.Initialize();
-    VerifyImageMagick.RegisterComparers(
-        threshold: 0.13,
-        ErrorMetric.PerceptualHash);
+    VerifierSettings.UseSsimForPng();
 }
 ```
-<sup><a href='/src/Tests/ModuleInitializer.cs#L3-L14' title='Snippet source file'>snippet source</a> | <a href='#snippet-enable' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/ModuleInitializer.cs#L3-L12' title='Snippet source file'>snippet source</a> | <a href='#snippet-enable' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 `VerifyImageMagick.RegisterComparers` (provided by https://github.com/VerifyTests/Verify.ImageMagick) allows minor image changes to be ignored.

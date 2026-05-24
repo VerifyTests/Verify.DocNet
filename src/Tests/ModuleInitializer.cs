@@ -6,9 +6,7 @@
     public static void Initialize()
     {
         VerifyDocNet.Initialize();
-        VerifyImageMagick.RegisterComparers(
-            threshold: 0.13,
-            ErrorMetric.PerceptualHash);
+        VerifierSettings.UseSsimForPng();
     }
 
     #endregion
