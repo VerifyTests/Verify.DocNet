@@ -58,6 +58,30 @@ public class PdfNormalizerTests
         Assert.That(reader.GetPageCount(), Is.EqualTo(2));
     }
 
+    [Test]
+    public void IsIdempotent()
+    {
+        // A second pass has nothing left to change: normalizing already-normalized bytes is a no-op.
+        var once = File.ReadAllBytes("sample.pdf");
+        PdfNormalizer.Normalize(once);
+        var twice = (byte[])once.Clone();
+        PdfNormalizer.Normalize(twice);
+        Assert.That(twice, Is.EqualTo(once));
+    }
+
+    [Test]
+    public void NormalizedSinglePageSplitStillLoads()
+    {
+        // A page subset is re-serialized by pdfium (reintroducing volatile fields) then normalized;
+        // it must remain a valid one-page document.
+        var data = File.ReadAllBytes("sample.pdf");
+        var split = DocLib.Instance.Split(data, 1, 1);
+        PdfNormalizer.Normalize(split);
+
+        using var reader = DocLib.Instance.GetDocReader(split, new(scalingFactor: 2));
+        Assert.That(reader.GetPageCount(), Is.EqualTo(1));
+    }
+
     static string Normalize(string value)
     {
         var bytes = Encoding.Latin1.GetBytes(value);

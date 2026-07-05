@@ -3,6 +3,7 @@
   PageCount: 2,
   Pages: [
     {
+      Index: 1,
       Text:
  Simple PDF File 2 
  ...continued from page 1. Yet more text. And more text. And more text. 

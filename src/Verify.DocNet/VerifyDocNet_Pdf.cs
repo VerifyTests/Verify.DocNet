@@ -9,16 +9,27 @@ public static partial class VerifyDocNet
 
         List<Target> targets;
         PdfInfo info;
+        int start;
+        int endExclusive;
         using (var reader = DocLib.Instance.GetDocReader(bytes, dimensions))
         {
-            (targets, info) = Render(name, reader, settings);
+            (targets, info, start, endExclusive) = Render(name, reader, settings);
         }
 
-        // Neutralize the volatile fields for the pdf snapshot only once the reader, which reads
-        // lazily from the same buffer, has been released.
-        PdfNormalizer.Normalize(bytes);
+        // Subset the source to only the rendered pages so the pdf snapshot matches the png/info
+        // pages. A full-document render reuses the original buffer; a filtered render is re-split
+        // via pdfium into a fresh buffer.
+        var coversAllPages = start == 0 && endExclusive == info.PageCount;
+        var pdfBytes = coversAllPages ?
+            bytes :
+            DocLib.Instance.Split(bytes, start, endExclusive - 1);
+
+        // Neutralize the volatile fields for the pdf snapshot. When the whole document is reused
+        // this must happen only after the reader, which reads lazily from the same buffer, has been
+        // released.
+        PdfNormalizer.Normalize(pdfBytes);
         targets.Add(
-            new("pdf", new MemoryStream(bytes), "pdf")
+            new("pdf", new MemoryStream(pdfBytes), "pdf")
             {
                 BypassComparersForSubsequentOnDifference = true
             });
@@ -26,15 +37,17 @@ public static partial class VerifyDocNet
         return new(info, targets);
     }
 
+    // Registered for callers that supply an IDocReader directly. No pdf snapshot is produced here
+    // since the original bytes are not available to subset and normalize.
     static ConversionResult Convert(string? name, IDocReader document, IReadOnlyDictionary<string, object> settings)
     {
-        var (targets, info) = Render(name, document, settings);
+        var (targets, info, _, _) = Render(name, document, settings);
         return new(info, targets);
     }
 
     static NaiveTransparencyRemover transparencyRemover = new();
 
-    static (List<Target> targets, PdfInfo info) Render(string? name, IDocReader document, IReadOnlyDictionary<string, object> settings)
+    static (List<Target> targets, PdfInfo info, int start, int endExclusive) Render(string? name, IDocReader document, IReadOnlyDictionary<string, object> settings)
     {
         var numberOfPages = document.GetPageCount();
         var pagesToInclude = settings.GetPagesToInclude(numberOfPages);
@@ -69,7 +82,7 @@ public static partial class VerifyDocNet
             PngEncoder.WriteBgraAsPng(rawBytes, width, height, stream);
             targets.Add(new("png", stream, name));
 
-            pages.Add(new() { Text = reader.GetText() });
+            pages.Add(new() { Index = index, Text = reader.GetText() });
         }
 
         var info = new PdfInfo
@@ -78,6 +91,6 @@ public static partial class VerifyDocNet
             PageCount = numberOfPages,
             Pages = pages
         };
-        return (targets, info);
+        return (targets, info, start, pagesToInclude);
     }
 }

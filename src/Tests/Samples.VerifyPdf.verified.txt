@@ -16,6 +16,7 @@
  text. And more text. And more text. Even more. Continued on page 2 ...
     },
     {
+      Index: 1,
       Text:
  Simple PDF File 2 
  ...continued from page 1. Yet more text. And more text. And more text. 
