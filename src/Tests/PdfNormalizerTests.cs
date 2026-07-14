@@ -106,6 +106,17 @@ public class PdfNormalizerTests
     }
 
     [Test]
+    public void HandlesUnterminatedFileIdWithoutOverrunning()
+    {
+        // A truncated /ID whose string runs to the end of the buffer with no closing '>'/')' (and no
+        // closing ']') must not scan past the buffer: the value is zeroed as far as it exists and the
+        // scan stops cleanly rather than throwing. Hex string form (no closing '>'):
+        Assert.That(Normalize("/ID [<ABCD"), Is.EqualTo("/ID [<0000"));
+        // Literal string form (no closing ')'):
+        Assert.That(Normalize("/ID [(ABCD"), Is.EqualTo("/ID [(0000"));
+    }
+
+    [Test]
     public void NormalizedDocumentStillLoads()
     {
         var data = File.ReadAllBytes("sample.pdf");
