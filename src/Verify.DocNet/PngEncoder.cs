@@ -69,55 +69,12 @@ static class PngEncoder
         stream.Write(type);
         stream.Write(data);
 
+        // CRC covers the chunk type followed by its data (CRC-32/ISO-HDLC, as PNG requires).
+        var hasher = new Crc32();
+        hasher.Append(type);
+        hasher.Append(data);
         Span<byte> crc = stackalloc byte[4];
-        BinaryPrimitives.WriteUInt32BigEndian(crc, Crc32.Compute(type, data));
+        BinaryPrimitives.WriteUInt32BigEndian(crc, hasher.GetCurrentHashAsUInt32());
         stream.Write(crc);
-    }
-
-    static class Crc32
-    {
-        static uint[] table = BuildTable();
-
-        static uint[] BuildTable()
-        {
-            var table = new uint[256];
-            for (var n = 0; n < 256; n++)
-            {
-                var c = (uint)n;
-                for (var k = 0; k < 8; k++)
-                {
-                    if ((c & 1) == 0)
-                    {
-                        c >>= 1;
-                    }
-                    else
-                    {
-                        c = 0xEDB88320 ^ (c >> 1);
-                    }
-                }
-
-                table[n] = c;
-            }
-
-            return table;
-        }
-
-        public static uint Compute(ReadOnlySpan<byte> type, ReadOnlySpan<byte> data)
-        {
-            var crc = 0xFFFFFFFFu;
-            crc = Update(crc, type);
-            crc = Update(crc, data);
-            return crc ^ 0xFFFFFFFFu;
-        }
-
-        static uint Update(uint crc, ReadOnlySpan<byte> data)
-        {
-            foreach (var b in data)
-            {
-                crc = table[(crc ^ b) & 0xFF] ^ (crc >> 8);
-            }
-
-            return crc;
-        }
     }
 }
