@@ -1,6 +1,3 @@
-using System.Runtime.CompilerServices;
-using Docnet.Core;
-
 [TestFixture]
 public class PdfSnapshotTests
 {
