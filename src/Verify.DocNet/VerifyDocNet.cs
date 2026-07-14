@@ -18,8 +18,15 @@ public static partial class VerifyDocNet
         VerifierSettings.RegisterFileConverter<IDocReader>((target, context) => Convert(null, target, context));
     }
 
-    public static void PagesToInclude(this VerifySettings settings, int count) =>
+    public static void PagesToInclude(this VerifySettings settings, int count)
+    {
+        if (count < 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(count), count, "PagesToInclude count must be greater than or equal to 1.");
+        }
+
         settings.Context["VerifyDocNetPagesToInclude"] = count;
+    }
 
     public static SettingsTask PagesToInclude(this SettingsTask settings, int count)
     {
@@ -37,8 +44,15 @@ public static partial class VerifyDocNet
         return count;
     }
 
-    public static void SinglePage(this VerifySettings settings, int index) =>
-      settings.Context["VerifyDocNetSinglePage"] = index;
+    public static void SinglePage(this VerifySettings settings, int index)
+    {
+        if (index < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(index), index, "SinglePage index must be greater than or equal to 0.");
+        }
+
+        settings.Context["VerifyDocNetSinglePage"] = index;
+    }
 
     /// <summary>
     /// Zero based index of single page to include (overrules PagesToInclude when in range)
