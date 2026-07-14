@@ -26,6 +26,66 @@ public class PdfNormalizerTests
     }
 
     [Test]
+    public void NeutralizesDublinCoreDate()
+    {
+        // Some producers (for example older Apache FOP) write the render time straight into the
+        // Dublin Core <dc:date> element as simple text content.
+        var input = "<dc:date>2024-01-15T09:30:00+05:30</dc:date>";
+        var expected = "<dc:date>0000-00-00T00:00:00+00:00</dc:date>";
+        Assert.That(Normalize(input), Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void NeutralizesDublinCoreDateSeq()
+    {
+        // Per the XMP spec dc:date is an ordered array (seq Date), so a spec-compliant producer
+        // (current Apache FOP) nests the render time in rdf:Seq/rdf:li rather than as direct text.
+        var input = "<dc:date><rdf:Seq><rdf:li>2024-01-15T09:30:00+05:30</rdf:li></rdf:Seq></dc:date>";
+        var expected = "<dc:date><rdf:Seq><rdf:li>0000-00-00T00:00:00+00:00</rdf:li></rdf:Seq></dc:date>";
+        Assert.That(Normalize(input), Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void NeutralizesDublinCoreDateSeqWithWhitespaceAndMultipleEntries()
+    {
+        // Pretty-printed with indentation and more than one date in the sequence: markup and
+        // whitespace are preserved while every date value is zeroed.
+        var input =
+            """
+            <dc:date>
+              <rdf:Seq>
+                <rdf:li>2024-01-15T09:30:00+05:30</rdf:li>
+                <rdf:li>2019-12-31T23:59:59Z</rdf:li>
+              </rdf:Seq>
+            </dc:date>
+            """;
+        var expected =
+            """
+            <dc:date>
+              <rdf:Seq>
+                <rdf:li>0000-00-00T00:00:00+00:00</rdf:li>
+                <rdf:li>0000-00-00T00:00:00Z</rdf:li>
+              </rdf:Seq>
+            </dc:date>
+            """;
+        Assert.That(Normalize(input), Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void LeavesNonDateRdfArraysUntouched()
+    {
+        // The rdf:li descent is scoped to dc:date, so digits in a sibling array (here dc:subject)
+        // must survive.
+        var input =
+            "<dc:subject><rdf:Bag><rdf:li>topic 2024</rdf:li></rdf:Bag></dc:subject>" +
+            "<dc:date><rdf:Seq><rdf:li>2024-01-15T09:30:00Z</rdf:li></rdf:Seq></dc:date>";
+        var expected =
+            "<dc:subject><rdf:Bag><rdf:li>topic 2024</rdf:li></rdf:Bag></dc:subject>" +
+            "<dc:date><rdf:Seq><rdf:li>0000-00-00T00:00:00Z</rdf:li></rdf:Seq></dc:date>";
+        Assert.That(Normalize(input), Is.EqualTo(expected));
+    }
+
+    [Test]
     public void CollapsesDifferingValuesToTheSameOutput()
     {
         // The same producer emits a stable structure across runs, so two documents differing only
@@ -53,6 +113,22 @@ public class PdfNormalizerTests
 
         using var reader = DocLib.Instance.GetDocReader(data, new(scalingFactor: 2));
         Assert.That(reader.GetPageCount(), Is.EqualTo(2));
+    }
+
+    [Test]
+    public void NeutralizesFopStyleXmp()
+    {
+        // sample-fop.pdf carries an uncompressed FOP-style XMP packet whose dc:date render time is
+        // nested in rdf:Seq/rdf:li. It must be neutralized while the document still loads.
+        var data = File.ReadAllBytes("sample-fop.pdf");
+        PdfNormalizer.Normalize(data);
+
+        var text = Encoding.Latin1.GetString(data);
+        Assert.That(text, Does.Contain("<rdf:li>0000-00-00T00:00:00+00:00</rdf:li>"));
+        Assert.That(text, Does.Not.Contain("2024-01-15"));
+
+        using var reader = DocLib.Instance.GetDocReader(data, new(scalingFactor: 2));
+        Assert.That(reader.GetPageCount(), Is.EqualTo(1));
     }
 
     [Test]
