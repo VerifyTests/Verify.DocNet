@@ -29,6 +29,16 @@ public class PdfNormalizerTests
     }
 
     [Test]
+    public void NeutralizesDublinCoreDate()
+    {
+        // Some producers (for example Apache FOP) write the render time into the Dublin Core
+        // <dc:date> element, a volatile per-render value like its xmp:* date siblings.
+        var input = "<dc:date>2024-01-15T09:30:00+05:30</dc:date>";
+        var expected = "<dc:date>0000-00-00T00:00:00+00:00</dc:date>";
+        Assert.That(Normalize(input), Is.EqualTo(expected));
+    }
+
+    [Test]
     public void CollapsesDifferingValuesToTheSameOutput()
     {
         // The same producer emits a stable structure across runs, so two documents differing only

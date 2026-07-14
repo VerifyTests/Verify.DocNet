@@ -42,6 +42,7 @@ static class PdfNormalizer
         ZeroXmpElement(data, "<xmp:CreateDate"u8, Fill.Digits);
         ZeroXmpElement(data, "<xmp:ModifyDate"u8, Fill.Digits);
         ZeroXmpElement(data, "<xmp:MetadataDate"u8, Fill.Digits);
+        ZeroXmpElement(data, "<dc:date"u8, Fill.Digits);
 
         // XMP per-generation identifiers.
         ZeroXmpElement(data, "<xmpMM:DocumentID"u8, Fill.All);
