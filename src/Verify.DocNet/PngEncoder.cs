@@ -86,7 +86,14 @@ static class PngEncoder
                 var c = (uint)n;
                 for (var k = 0; k < 8; k++)
                 {
-                    c = (c & 1) != 0 ? 0xEDB88320 ^ (c >> 1) : c >> 1;
+                    if ((c & 1) == 0)
+                    {
+                        c >>= 1;
+                    }
+                    else
+                    {
+                        c = 0xEDB88320 ^ (c >> 1);
+                    }
                 }
 
                 table[n] = c;
