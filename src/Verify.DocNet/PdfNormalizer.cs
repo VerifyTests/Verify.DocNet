@@ -124,14 +124,20 @@ static class PdfNormalizer
                     var start = i + 1;
                     i = FindByte(data, start, (byte) '>');
                     Overwrite(data, start, i, Fill.Hex);
-                    i++;
+                    if (i < data.Length)
+                    {
+                        i++;
+                    }
                 }
                 else if (data[i] == (byte) '(')
                 {
                     var start = i + 1;
                     i = FindLiteralEnd(data, start);
                     Overwrite(data, start, i, Fill.All);
-                    i++;
+                    if (i < data.Length)
+                    {
+                        i++;
+                    }
                 }
                 else
                 {
