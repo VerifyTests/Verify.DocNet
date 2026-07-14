@@ -43,6 +43,11 @@ static class PdfNormalizer
         ZeroXmpElement(data, "<xmp:ModifyDate"u8, Fill.Digits);
         ZeroXmpElement(data, "<xmp:MetadataDate"u8, Fill.Digits);
 
+        // Dublin Core date. Unlike the xmp:* dates above it is an ordered array (seq Date), so the
+        // value is nested inside rdf:Seq/rdf:li rather than being direct text content of the element
+        // (this is what Apache FOP emits).
+        ZeroXmpElementTree(data, "<dc:date"u8, "</dc:date>"u8, Fill.Digits);
+
         // XMP per-generation identifiers.
         ZeroXmpElement(data, "<xmpMM:DocumentID"u8, Fill.All);
         ZeroXmpElement(data, "<xmpMM:InstanceID"u8, Fill.All);
@@ -144,10 +149,76 @@ static class PdfNormalizer
         var pos = 0;
         while (true)
         {
+            var start = NextXmpElementContent(data, openTag, ref pos);
+            if (start < 0)
+            {
+                return;
+            }
+
+            var end = FindByte(data, start, (byte) '<');
+            Overwrite(data, start, end, fill);
+            pos = end;
+        }
+    }
+
+    // Like ZeroXmpElement, but descends through child markup and zeroes the content of every text
+    // node up to the matching close tag. XMP array properties (for example dc:date, a "seq Date")
+    // wrap their value in an rdf:Seq/rdf:li list, so the volatile value is not direct text content of
+    // the named element and ZeroXmpElement alone would step over it.
+    static void ZeroXmpElementTree(byte[] data, ReadOnlySpan<byte> openTag, ReadOnlySpan<byte> closeTag, Fill fill)
+    {
+        var pos = 0;
+        while (true)
+        {
+            var start = NextXmpElementContent(data, openTag, ref pos);
+            if (start < 0)
+            {
+                return;
+            }
+
+            var closeHit = data.AsSpan(start).IndexOf(closeTag);
+            if (closeHit < 0)
+            {
+                return;
+            }
+
+            var end = start + closeHit;
+            var i = start;
+            while (i < end)
+            {
+                // Skip markup so only text nodes are altered, never element or attribute names.
+                if (data[i] == (byte) '<')
+                {
+                    i = FindByte(data, i, (byte) '>');
+                    if (i < end)
+                    {
+                        i++;
+                    }
+
+                    continue;
+                }
+
+                var textEnd = FindByte(data, i, (byte) '<');
+                Overwrite(data, i, textEnd, fill);
+                i = textEnd;
+            }
+
+            pos = end;
+        }
+    }
+
+    // Locates the next element whose opening tag is 'openTag', returning the index of its content
+    // (the byte after '>'), or -1 when no further match exists. A longer look-alike name or a
+    // self-closing tag is skipped internally. 'pos' is advanced past the opening tag so scanning can
+    // resume from the returned index.
+    static int NextXmpElementContent(byte[] data, ReadOnlySpan<byte> openTag, ref int pos)
+    {
+        while (true)
+        {
             var hit = data.AsSpan(pos).IndexOf(openTag);
             if (hit < 0)
             {
-                return;
+                return -1;
             }
 
             var i = pos + hit + openTag.Length;
@@ -174,19 +245,17 @@ static class PdfNormalizer
 
             if (i >= data.Length)
             {
-                return;
+                return -1;
             }
 
             i++;
+            pos = i;
             if (lastSignificant == (byte) '/')
             {
                 continue;
             }
 
-            var start = i;
-            var end = FindByte(data, start, (byte) '<');
-            Overwrite(data, start, end, fill);
-            pos = end;
+            return i;
         }
     }
 
