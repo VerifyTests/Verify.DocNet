@@ -23,10 +23,14 @@ public class PngEncoderTests
             Assert.That(decoded.Width, Is.EqualTo(width));
             Assert.That(decoded.Height, Is.EqualTo(height));
             Assert.That(decoded.BitDepth, Is.EqualTo(8));
-            Assert.That(decoded.ColorType, Is.EqualTo(6)); // truecolor with alpha
-            Assert.That(decoded.Compression, Is.EqualTo(0)); // deflate
-            Assert.That(decoded.Filter, Is.EqualTo(0)); // adaptive
-            Assert.That(decoded.Interlace, Is.EqualTo(0)); // none
+            // truecolor with alpha
+            Assert.That(decoded.ColorType, Is.EqualTo(6));
+            // deflate
+            Assert.That(decoded.Compression, Is.EqualTo(0));
+            // adaptive
+            Assert.That(decoded.Filter, Is.EqualTo(0));
+            // none
+            Assert.That(decoded.Interlace, Is.EqualTo(0));
         });
     }
 
