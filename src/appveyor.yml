@@ -1,7 +1,6 @@
 image:
 - Visual Studio 2022
 - Ubuntu2204
-- macos
 environment:
   DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
@@ -43,19 +42,14 @@ for:
         appveyor PushArtifact $_.FullName -FileName $rel
       }
 
-# Linux and macOS
+# Linux
 - matrix:
     only:
     - image: Ubuntu2204
-    - image: macos
   install:
   - sh: |
-      if [ "$(uname)" = "Darwin" ]; then
-        NONINTERACTIVE=1 brew install fop
-      else
-        sudo apt-get update
-        sudo apt-get install -y fop
-      fi
+      sudo apt-get update
+      sudo apt-get install -y fop
   build_script:
   - sh: |
       curl -sSL "https://dot.net/v1/dotnet-install.sh" -o ./dotnet-install.sh
