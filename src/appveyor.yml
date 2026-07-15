@@ -24,8 +24,14 @@ build_script:
       $env:PATH = "$HOME/.dotnet" + [IO.Path]::PathSeparator + $env:PATH
     }
     dotnet build src --configuration Release
-    dotnet test src --configuration Release --no-build --no-restore
+    dotnet test src --configuration Release --no-build --no-restore --report-trx
 test: off
+on_finish:
+- pwsh: |
+    $wc = New-Object System.Net.WebClient
+    Get-ChildItem TestResults -Filter *.trx -Recurse | ForEach-Object {
+      $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$env:APPVEYOR_JOB_ID", $_.FullName)
+    }
 artifacts:
 - path: nugets\*.nupkg
 on_failure:
