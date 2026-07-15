@@ -7,50 +7,61 @@ environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 install:
-- pwsh: |
-    if ($IsWindows) {
-      Invoke-WebRequest "https://archive.apache.org/dist/xmlgraphics/fop/binaries/fop-2.11-bin.zip" -OutFile fop.zip
-      Expand-Archive fop.zip -DestinationPath C:\fop
-      appveyor SetVariable -Name FOP_HOME -Value 'C:\fop\fop-2.11\fop'
-    } elseif ($IsMacOS) {
-      brew install fop
-    } else {
+# Windows: download Apache FOP and expose it via FOP_HOME.
+- ps: |
+    Invoke-WebRequest "https://archive.apache.org/dist/xmlgraphics/fop/binaries/fop-2.11-bin.zip" -OutFile fop.zip
+    Expand-Archive fop.zip -DestinationPath C:\fop
+    appveyor SetVariable -Name FOP_HOME -Value 'C:\fop\fop-2.11\fop'
+# Linux/macOS: install Apache FOP via the native package manager (bash, so macOS does not
+# need to bootstrap pwsh, which prompts interactively and hangs the build).
+- sh: |
+    if [ "$(uname)" = "Darwin" ]; then
+      NONINTERACTIVE=1 brew install fop
+    else
       sudo apt-get update
       sudo apt-get install -y fop
-    }
+    fi
 build_script:
-- pwsh: |
-    if ($IsWindows) {
-      Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./dotnet-install.ps1"
-      ./dotnet-install.ps1 -JSonFile global.json -Architecture x64 -InstallDir 'C:\Program Files\dotnet'
-    } else {
-      Invoke-WebRequest "https://dot.net/v1/dotnet-install.sh" -OutFile "./dotnet-install.sh"
-      bash ./dotnet-install.sh --jsonfile global.json --install-dir "$HOME/.dotnet"
-      $env:PATH = "$HOME/.dotnet" + [IO.Path]::PathSeparator + $env:PATH
-    }
+# Windows build/test.
+- ps: |
+    Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./dotnet-install.ps1"
+    ./dotnet-install.ps1 -JSonFile global.json -Architecture x64 -InstallDir 'C:\Program Files\dotnet'
     dotnet build src --configuration Release
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     dotnet test src --configuration Release --no-build --no-restore --report-trx
     $testExit = $LASTEXITCODE
-    # Upload test results inline (not on_finish) so it runs on every matrix job before the exit.
     $url = "https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)"
-    $trx = Get-ChildItem TestResults -Filter *.trx -Recurse
-    foreach ($file in $trx) {
-      Write-Host "Uploading test results: $($file.FullName)"
-      try {
-        (New-Object System.Net.WebClient).UploadFile($url, $file.FullName)
-      } catch {
-        Write-Host "Failed to upload test results: $_"
-      }
+    Get-ChildItem TestResults -Filter *.trx -Recurse | ForEach-Object {
+      Write-Host "Uploading test results: $($_.FullName)"
+      try { (New-Object System.Net.WebClient).UploadFile($url, $_.FullName) }
+      catch { Write-Host "Failed to upload test results: $_" }
     }
     if ($testExit -ne 0) { exit $testExit }
+# Linux/macOS build/test.
+- sh: |
+    curl -sSL "https://dot.net/v1/dotnet-install.sh" -o ./dotnet-install.sh
+    bash ./dotnet-install.sh --jsonfile global.json --install-dir "$HOME/.dotnet"
+    export PATH="$HOME/.dotnet:$PATH"
+    dotnet build src --configuration Release || exit $?
+    dotnet test src --configuration Release --no-build --no-restore --report-trx
+    testExit=$?
+    url="https://ci.appveyor.com/api/testresults/mstest/$APPVEYOR_JOB_ID"
+    find TestResults -name '*.trx' | while read -r f; do
+      echo "Uploading test results: $f"
+      curl -sf -F "file=@$f" "$url" || echo "Failed to upload test results: $f"
+    done
+    exit $testExit
 test: off
 artifacts:
 - path: nugets\*.nupkg
 on_failure:
-  - pwsh: |
-      $root = (Get-Location).Path
-      Get-ChildItem *.received.* -Recurse | % {
-        $rel = $_.FullName.Substring($root.Length + 1)
-        Push-AppveyorArtifact $_.FullName -FileName $rel
-      }
+- ps: |
+    $root = (Get-Location).Path
+    Get-ChildItem *.received.* -Recurse | % {
+      $rel = $_.FullName.Substring($root.Length + 1)
+      appveyor PushArtifact $_.FullName -FileName $rel
+    }
+- sh: |
+    find . -name '*.received.*' | while read -r f; do
+      appveyor PushArtifact "$f" -FileName "${f#./}"
+    done
