@@ -60,7 +60,7 @@ public static void Initialize()
 public Task VerifyPdf() =>
     VerifyFile("sample.pdf");
 ```
-<sup><a href='/src/Tests/Samples.cs#L4-L10' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyPdf' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L3-L9' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyPdf' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -76,7 +76,7 @@ public Task VerifyPdfStream()
     return Verify(stream, "pdf");
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L30-L39' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyPdfStream' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L29-L38' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifyPdfStream' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -97,7 +97,7 @@ public Task VerifyPreserveTransparency() =>
     VerifyFile("sample.pdf")
         .PreserveTransparency();
 ```
-<sup><a href='/src/Tests/Samples.cs#L12-L19' title='Snippet source file'>snippet source</a> | <a href='#snippet-PreserveTransparency' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L11-L18' title='Snippet source file'>snippet source</a> | <a href='#snippet-PreserveTransparency' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 
@@ -111,7 +111,7 @@ public Task VerifyPageDimensions() =>
     VerifyFile("sample.pdf")
         .PageDimensions(new(1080, 1920));
 ```
-<sup><a href='/src/Tests/Samples.cs#L21-L28' title='Snippet source file'>snippet source</a> | <a href='#snippet-PageDimensions' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L20-L27' title='Snippet source file'>snippet source</a> | <a href='#snippet-PageDimensions' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## VerifySinglePage
@@ -133,7 +133,7 @@ public Task VerifySecondPage()
     return Verify(stream, "pdf").SinglePage(1);
 }
 ```
-<sup><a href='/src/Tests/Samples.cs#L41-L57' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifySinglePage' title='Start of snippet'>anchor</a></sup>
+<sup><a href='/src/Tests/Samples.cs#L40-L56' title='Snippet source file'>snippet source</a> | <a href='#snippet-VerifySinglePage' title='Start of snippet'>anchor</a></sup>
 <!-- endSnippet -->
 
 ## File Samples

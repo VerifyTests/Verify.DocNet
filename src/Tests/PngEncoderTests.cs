@@ -1,69 +1,66 @@
-[TestFixture]
 public class PngEncoderTests
 {
     [Test]
-    public void StartsWithPngSignature()
+    public async Task StartsWithPngSignature()
     {
         var png = Encode(Gradient(1, 1), 1, 1);
 
         ReadOnlySpan<byte> signature = [137, 80, 78, 71, 13, 10, 26, 10];
-        Assert.That(png.AsSpan(0, 8).SequenceEqual(signature), Is.True);
+        await Assert.That(png.AsSpan(0, 8).SequenceEqual(signature)).IsTrue();
     }
 
-    [TestCase(1, 1)]
-    [TestCase(2, 3)]
-    [TestCase(7, 5)]
-    [TestCase(64, 48)]
-    public void HeaderDescribesDimensionsAndRgbaFormat(int width, int height)
+    [Arguments(1, 1)]
+    [Arguments(2, 3)]
+    [Arguments(7, 5)]
+    [Arguments(64, 48)]
+    [Test]
+    public async Task HeaderDescribesDimensionsAndRgbaFormat(int width, int height)
     {
         var decoded = Decode(Encode(Gradient(width, height), width, height));
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(decoded.Width, Is.EqualTo(width));
-            Assert.That(decoded.Height, Is.EqualTo(height));
-            Assert.That(decoded.BitDepth, Is.EqualTo(8));
-            // truecolor with alpha
-            Assert.That(decoded.ColorType, Is.EqualTo(6));
-            // deflate
-            Assert.That(decoded.Compression, Is.EqualTo(0));
-            // adaptive
-            Assert.That(decoded.Filter, Is.EqualTo(0));
-            // none
-            Assert.That(decoded.Interlace, Is.EqualTo(0));
-        });
+        await Assert.That(decoded.Width).IsEqualTo(width);
+        await Assert.That(decoded.Height).IsEqualTo(height);
+        await Assert.That(decoded.BitDepth).IsEqualTo((byte)8);
+        // truecolor with alpha
+        await Assert.That(decoded.ColorType).IsEqualTo((byte)6);
+        // deflate
+        await Assert.That(decoded.Compression).IsEqualTo((byte)0);
+        // adaptive
+        await Assert.That(decoded.Filter).IsEqualTo((byte)0);
+        // none
+        await Assert.That(decoded.Interlace).IsEqualTo((byte)0);
     }
 
     [Test]
-    public void ChunkOrderIsIhdrThenIdatThenIend()
+    public async Task ChunkOrderIsIhdrThenIdatThenIend()
     {
         var types = ReadChunks(Encode(Gradient(4, 4), 4, 4))
             .Select(_ => _.type)
             .ToList();
 
-        Assert.That(types, Is.EqualTo(["IHDR", "IDAT", "IEND"]));
+        await Assert.That(types).IsEquivalentTo(["IHDR", "IDAT", "IEND"]);
     }
 
     [Test]
-    public void EndChunkIsEmpty()
+    public async Task EndChunkIsEmpty()
     {
         var end = ReadChunks(Encode(Gradient(4, 4), 4, 4))
             .Single(_ => _.type == "IEND");
 
-        Assert.That(end.data, Is.Empty);
+        await Assert.That(end.data).IsEmpty();
     }
 
     [Test]
-    public void EveryChunkHasValidCrc()
+    public async Task EveryChunkHasValidCrc()
     {
         foreach (var chunk in ReadChunks(Encode(Gradient(10, 6), 10, 6)))
         {
-            Assert.That(chunk.crcValid, Is.True, $"Invalid CRC for chunk {chunk.type}");
+            await Assert.That(chunk.crcValid).IsTrue();
         }
     }
 
     [Test]
-    public void EveryScanlineUsesNoneFilter()
+    public async Task EveryScanlineUsesNoneFilter()
     {
         const int width = 5;
         const int height = 4;
@@ -71,12 +68,12 @@ public class PngEncoderTests
 
         for (var y = 0; y < height; y++)
         {
-            Assert.That(decoded.FilterByte(y), Is.EqualTo(0), $"Row {y} should use the None filter");
+            await Assert.That(decoded.FilterByte(y)).IsEqualTo((byte)0);
         }
     }
 
     [Test]
-    public void RoundTripsPixelsConvertingBgraToRgba()
+    public async Task RoundTripsPixelsConvertingBgraToRgba()
     {
         const int width = 3;
         const int height = 2;
@@ -92,29 +89,29 @@ public class PngEncoderTests
             var r = bgra[source + 2];
             var a = bgra[source + 3];
 
-            Assert.That(decoded.Pixel(x, y), Is.EqualTo((r, g, b, a)), $"Pixel ({x},{y})");
+            await Assert.That(decoded.Pixel(x, y)).IsEqualTo((r, g, b, a));
         }
     }
 
     [Test]
-    public void PreservesAlphaChannel()
+    public async Task PreservesAlphaChannel()
     {
         // a single fully transparent blue pixel (B=255, G=0, R=0, A=0)
         var decoded = Decode(Encode([255, 0, 0, 0], 1, 1));
 
-        Assert.That(decoded.Pixel(0, 0), Is.EqualTo(((byte)0, (byte)0, (byte)255, (byte)0)));
+        await Assert.That(decoded.Pixel(0, 0)).IsEqualTo(((byte)0, (byte)0, (byte)255, (byte)0));
     }
 
     [Test]
-    public void OutputIsDeterministic()
+    public async Task OutputIsDeterministic()
     {
         var bgra = Gradient(20, 12);
 
-        Assert.That(Encode(bgra, 20, 12), Is.EqualTo(Encode(bgra, 20, 12)));
+        await Assert.That(Encode(bgra, 20, 12)).IsEquivalentTo(Encode(bgra, 20, 12));
     }
 
     [Test]
-    public void ProducesPngDecodableByImageMagick()
+    public async Task ProducesPngDecodableByImageMagick()
     {
         const int width = 8;
         const int height = 6;
@@ -122,9 +119,9 @@ public class PngEncoderTests
 
         using var image = new MagickImage(Encode(bgra, width, height));
 
-        Assert.That(image.Format, Is.EqualTo(MagickFormat.Png));
-        Assert.That((int)image.Width, Is.EqualTo(width));
-        Assert.That((int)image.Height, Is.EqualTo(height));
+        await Assert.That(image.Format).IsEqualTo(MagickFormat.Png);
+        await Assert.That((int)image.Width).IsEqualTo(width);
+        await Assert.That((int)image.Height).IsEqualTo(height);
     }
 
     static byte[] Encode(byte[] bgra, int width, int height)

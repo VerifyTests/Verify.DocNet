@@ -1,4 +1,3 @@
-[TestFixture]
 public class FopTests
 {
     // Renders sample.fo to a PDF using a locally installed Apache FOP, then verifies the result.
@@ -11,7 +10,8 @@ public class FopTests
         var fop = FindFop();
         if (fop == null)
         {
-            Assert.Inconclusive("Apache FOP not found on PATH. Set the FOP_HOME environment variable or add fop to PATH.");
+            Skip.Test("Apache FOP not found on PATH. Set the FOP_HOME environment variable or add fop to PATH.");
+            return;
         }
 
         var output = Path.Combine(Path.GetTempPath(), $"verify-docnet-fop-{Guid.NewGuid():N}.pdf");
