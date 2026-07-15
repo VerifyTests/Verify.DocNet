@@ -16,11 +16,12 @@ install:
     fi
 build_script:
 - pwsh: |
-    Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./dotnet-install.ps1"
     if ($IsWindows) {
+      Invoke-WebRequest "https://dot.net/v1/dotnet-install.ps1" -OutFile "./dotnet-install.ps1"
       ./dotnet-install.ps1 -JSonFile global.json -Architecture x64 -InstallDir 'C:\Program Files\dotnet'
     } else {
-      ./dotnet-install.ps1 -JSonFile global.json -InstallDir "$HOME/.dotnet"
+      Invoke-WebRequest "https://dot.net/v1/dotnet-install.sh" -OutFile "./dotnet-install.sh"
+      bash ./dotnet-install.sh --jsonfile global.json --install-dir "$HOME/.dotnet"
       $env:PATH = "$HOME/.dotnet" + [IO.Path]::PathSeparator + $env:PATH
     }
     dotnet build src --configuration Release
