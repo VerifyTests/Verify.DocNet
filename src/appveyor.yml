@@ -11,7 +11,7 @@ install:
     if ($IsWindows) {
       Invoke-WebRequest "https://archive.apache.org/dist/xmlgraphics/fop/binaries/fop-2.11-bin.zip" -OutFile fop.zip
       Expand-Archive fop.zip -DestinationPath C:\fop
-      Set-AppveyorEnvironmentVariable -Name FOP_HOME -Value 'C:\fop\fop-2.11\fop'
+      appveyor SetVariable -Name FOP_HOME -Value 'C:\fop\fop-2.11\fop'
     } elseif ($IsMacOS) {
       brew install fop
     } else {
