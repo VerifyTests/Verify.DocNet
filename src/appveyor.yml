@@ -29,7 +29,9 @@ build_script:
       $env:PATH = "$HOME/.dotnet" + [IO.Path]::PathSeparator + $env:PATH
     }
     dotnet build src --configuration Release
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     dotnet test src --configuration Release --no-build --no-restore --report-trx
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 test: off
 on_finish:
 - pwsh: |
