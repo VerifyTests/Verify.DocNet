@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
+  <fo:layout-master-set>
+    <fo:simple-page-master master-name="page"
+                           page-width="210mm" page-height="297mm"
+                           margin="20mm">
+      <fo:region-body/>
+    </fo:simple-page-master>
+  </fo:layout-master-set>
+  <fo:page-sequence master-reference="page">
+    <fo:flow flow-name="xsl-region-body">
+      <fo:block font-size="24pt" font-weight="bold" space-after="10mm">
+        Verify.DocNet
+      </fo:block>
+      <fo:block font-size="12pt">
+        A deterministic PDF produced by Apache FOP for snapshot testing.
+      </fo:block>
+    </fo:flow>
+  </fo:page-sequence>
+</fo:root>
