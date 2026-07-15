@@ -48,8 +48,10 @@ for:
     - image: Ubuntu2204
   install:
   - sh: |
-      sudo apt-get update
-      sudo apt-get install -y fop
+      curl -sSL "https://archive.apache.org/dist/xmlgraphics/fop/binaries/fop-2.11-bin.zip" -o fop.zip
+      unzip -q fop.zip -d "$HOME/fop"
+      chmod +x "$HOME/fop/fop-2.11/fop/fop"
+      appveyor SetVariable -Name FOP_HOME -Value "$HOME/fop/fop-2.11/fop"
   build_script:
   - sh: |
       curl -sSL "https://dot.net/v1/dotnet-install.sh" -o ./dotnet-install.sh
@@ -63,9 +65,8 @@ for:
         echo "Uploading test results: $f"
         curl -sf -F "file=@$f" "$url" || echo "Failed to upload test results: $f"
       done
-      exit $testExit
-  on_failure:
-  - sh: |
       find . -name '*.received.*' | while read -r f; do
+        echo "Pushing artifact: ${f#./}"
         appveyor PushArtifact "$f" -FileName "${f#./}"
       done
+      exit $testExit
