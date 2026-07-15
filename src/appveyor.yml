@@ -7,13 +7,17 @@ environment:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 install:
-- sh: |
-    if [ "$(uname)" = "Darwin" ]; then
+- pwsh: |
+    if ($IsWindows) {
+      Invoke-WebRequest "https://archive.apache.org/dist/xmlgraphics/fop/binaries/fop-2.11-bin.zip" -OutFile fop.zip
+      Expand-Archive fop.zip -DestinationPath C:\fop
+      Set-AppveyorEnvironmentVariable -Name FOP_HOME -Value 'C:\fop\fop-2.11\fop'
+    } elseif ($IsMacOS) {
       brew install fop
-    else
+    } else {
       sudo apt-get update
       sudo apt-get install -y fop
-    fi
+    }
 build_script:
 - pwsh: |
     if ($IsWindows) {
