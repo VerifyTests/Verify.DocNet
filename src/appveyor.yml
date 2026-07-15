@@ -31,14 +31,20 @@ build_script:
     dotnet build src --configuration Release
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     dotnet test src --configuration Release --no-build --no-restore --report-trx
-    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-test: off
-on_finish:
-- pwsh: |
-    $wc = New-Object System.Net.WebClient
-    Get-ChildItem TestResults -Filter *.trx -Recurse | ForEach-Object {
-      $wc.UploadFile("https://ci.appveyor.com/api/testresults/mstest/$env:APPVEYOR_JOB_ID", $_.FullName)
+    $testExit = $LASTEXITCODE
+    # Upload test results inline (not on_finish) so it runs on every matrix job before the exit.
+    $url = "https://ci.appveyor.com/api/testresults/mstest/$($env:APPVEYOR_JOB_ID)"
+    $trx = Get-ChildItem TestResults -Filter *.trx -Recurse
+    foreach ($file in $trx) {
+      Write-Host "Uploading test results: $($file.FullName)"
+      try {
+        (New-Object System.Net.WebClient).UploadFile($url, $file.FullName)
+      } catch {
+        Write-Host "Failed to upload test results: $_"
+      }
     }
+    if ($testExit -ne 0) { exit $testExit }
+test: off
 artifacts:
 - path: nugets\*.nupkg
 on_failure:
