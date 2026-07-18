@@ -1,0 +1,11 @@
+﻿{
+  Version: 1.4,
+  PageCount: 1,
+  Pages: [
+    {
+      Text:
+Verify.DocNet
+A deterministic PDF produced by Apache FOP for snapshot testing.
+    }
+  ]
+}

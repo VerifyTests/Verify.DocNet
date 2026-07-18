@@ -27,7 +27,7 @@ public static partial class VerifyDocNet
         // Neutralize the volatile fields for the pdf snapshot. When the whole document is reused
         // this must happen only after the reader, which reads lazily from the same buffer, has been
         // released.
-        PdfNormalizer.Normalize(pdfBytes);
+        pdfBytes = PdfNormalizer.Normalize(pdfBytes);
         targets.Add(
             new("pdf", new MemoryStream(pdfBytes), "pdf")
             {

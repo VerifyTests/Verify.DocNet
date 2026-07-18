@@ -119,7 +119,7 @@ public class PdfNormalizerTests
     public async Task NormalizedDocumentStillLoads()
     {
         var data = File.ReadAllBytes("sample.pdf");
-        PdfNormalizer.Normalize(data);
+        data = PdfNormalizer.Normalize(data);
 
         using var reader = DocLib.Instance.GetDocReader(data, new(scalingFactor: 2));
         await Assert.That(reader.GetPageCount()).IsEqualTo(2);
@@ -131,7 +131,7 @@ public class PdfNormalizerTests
         // sample-fop.pdf carries an uncompressed FOP-style XMP packet whose dc:date render time is
         // nested in rdf:Seq/rdf:li. It must be neutralized while the document still loads.
         var data = File.ReadAllBytes("sample-fop.pdf");
-        PdfNormalizer.Normalize(data);
+        data = PdfNormalizer.Normalize(data);
 
         var text = Encoding.Latin1.GetString(data);
         await Assert.That(text).Contains("<rdf:li>0000-00-00T00:00:00+00:00</rdf:li>");
@@ -142,13 +142,30 @@ public class PdfNormalizerTests
     }
 
     [Test]
+    public async Task CanonicalizesXmpAcrossJreSerializers()
+    {
+        // The same FOP document rendered on two machines. Apache FOP serializes the XMP packet through
+        // the platform's XML writer, so the JDK decides the indentation: one build emits a compact
+        // packet, the other indents every element, and the raw bytes differ. Once normalized, the pdf
+        // snapshot must collapse to identical bytes on both, and still load.
+        var compactRaw = File.ReadAllBytes("sample-fop-compact.pdf");
+        var indentedRaw = File.ReadAllBytes("sample-fop-indented.pdf");
+        await Assert.That(compactRaw.SequenceEqual(indentedRaw)).IsFalse();
+
+        var compact = PdfNormalizer.Normalize(compactRaw);
+        var indented = PdfNormalizer.Normalize(indentedRaw);
+        await Assert.That(compact).IsEquivalentTo(indented);
+
+        using var reader = DocLib.Instance.GetDocReader(compact, new(scalingFactor: 2));
+        await Assert.That(reader.GetPageCount()).IsEqualTo(1);
+    }
+
+    [Test]
     public async Task IsIdempotent()
     {
         // A second pass has nothing left to change: normalizing already-normalized bytes is a no-op.
-        var once = File.ReadAllBytes("sample.pdf");
-        PdfNormalizer.Normalize(once);
-        var twice = (byte[])once.Clone();
-        PdfNormalizer.Normalize(twice);
+        var once = PdfNormalizer.Normalize(File.ReadAllBytes("sample.pdf"));
+        var twice = PdfNormalizer.Normalize((byte[]) once.Clone());
         await Assert.That(twice).IsEquivalentTo(once);
     }
 
@@ -159,7 +176,7 @@ public class PdfNormalizerTests
         // it must remain a valid one-page document.
         var data = File.ReadAllBytes("sample.pdf");
         var split = DocLib.Instance.Split(data, 1, 1);
-        PdfNormalizer.Normalize(split);
+        split = PdfNormalizer.Normalize(split);
 
         using var reader = DocLib.Instance.GetDocReader(split, new(scalingFactor: 2));
         await Assert.That(reader.GetPageCount()).IsEqualTo(1);
@@ -168,7 +185,7 @@ public class PdfNormalizerTests
     static string Normalize(string value)
     {
         var bytes = Encoding.Latin1.GetBytes(value);
-        PdfNormalizer.Normalize(bytes);
+        bytes = PdfNormalizer.Normalize(bytes);
         return Encoding.Latin1.GetString(bytes);
     }
 }
