@@ -4,6 +4,7 @@
   </PropertyGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="Tests" />
+    <PackageReference Include="DeterministicPdf" />
     <PackageReference Include="Docnet.Core" />
     <PackageReference Include="System.IO.Hashing" />
     <PackageReference Include="Verify" />
