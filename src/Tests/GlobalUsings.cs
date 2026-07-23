@@ -1,4 +1,5 @@
-﻿global using System.Buffers.Binary;
+global using DeterministicPdf;
+global using System.Buffers.Binary;
 global using System.Diagnostics;
 global using System.IO.Compression;
 global using Docnet.Core;

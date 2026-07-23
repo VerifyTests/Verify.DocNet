@@ -8,6 +8,15 @@ public class Samples
 
     #endregion
 
+    #region SkipPdfNormalization
+
+    [Test]
+    public Task SkipPdfNormalization() =>
+        VerifyFile("sample.pdf")
+            .SkipPdfNormalization();
+
+    #endregion
+
     #region PreserveTransparency
 
     [Test]

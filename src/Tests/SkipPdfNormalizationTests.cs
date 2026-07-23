@@ -1,0 +1,24 @@
+// The Samples entry for SkipPdfNormalization only proves the setting round-trips through a
+// verification. These assert the wiring it is actually there for: with the setting the snapshotted
+// bytes are the producer's own, and without it they are the normalized ones.
+public class SkipPdfNormalizationTests
+{
+    [Test]
+    public async Task SampleIsNotAlreadyNormalized()
+    {
+        // The premise the two tests below rest on. If sample.pdf were already byte-identical to its
+        // normalized form they would both pass while asserting nothing.
+        var raw = await File.ReadAllBytesAsync("sample.pdf");
+
+        await Assert.That(PdfNormalizer.Normalize(raw)).IsNotEquivalentTo(raw);
+    }
+
+    [Test]
+    public async Task SkippedSnapshotHoldsTheProducerBytes() =>
+        await Verify(new MemoryStream(await File.ReadAllBytesAsync("sample.pdf")), "pdf")
+            .SkipPdfNormalization();
+
+    [Test]
+    public async Task NormalizedSnapshotHoldsTheNeutralizedBytes() =>
+        await Verify(new MemoryStream(await File.ReadAllBytesAsync("sample.pdf")), "pdf");
+}

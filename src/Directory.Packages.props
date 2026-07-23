@@ -4,6 +4,7 @@
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="DeterministicPdf" Version="1.0.2" />
     <PackageVersion Include="Docnet.Core" Version="2.6.0" />
     <PackageVersion Include="System.IO.Hashing" Version="10.0.10" />
     <PackageVersion Include="Magick.NET-Q16-AnyCPU" Version="14.15.0" />
