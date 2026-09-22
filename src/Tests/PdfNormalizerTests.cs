@@ -20,7 +20,7 @@ public class PdfNormalizerTests
         var data = PdfNormalizer.Normalize(await File.ReadAllBytesAsync("sample-fop.pdf"));
 
         var text = Encoding.Latin1.GetString(data);
-        await Assert.That(text).Contains("<rdf:li>0000-00-00T00:00:00+00:00</rdf:li>");
+        await Assert.That(text).Contains("<rdf:li>0000-00-00T00:00:00Z</rdf:li>");
         await Assert.That(text).DoesNotContain("2024-01-15");
 
         using var reader = DocLib.Instance.GetDocReader(data, new(scalingFactor: 2));
