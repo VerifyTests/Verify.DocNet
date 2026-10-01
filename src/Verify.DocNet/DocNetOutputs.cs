@@ -7,6 +7,9 @@ namespace VerifyTests;
 [Flags]
 public enum DocNetOutputs
 {
+    /// <summary>No outputs. Only the source document and info are emitted.</summary>
+    None = 0,
+
     /// <summary>Render each page to a png. When omitted, pages are not rendered.</summary>
     Png = 1,
 
