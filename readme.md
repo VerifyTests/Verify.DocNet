@@ -52,6 +52,27 @@ public static void Initialize()
 `VerifyImageMagick.RegisterComparers` (provided by https://github.com/VerifyTests/Verify.ImageMagick) allows minor image changes to be ignored.
 
 
+### Outputs
+
+By default each pdf is split into a png per page and the text of each page (in the info). `Initialize` accepts a `DocNetOutputs` flags enum to choose which of these are produced globally:
+
+ * `Png`: render each page to a png.
+ * `Text`: extract the text of each page into the info.
+ * `All` (default): both.
+
+Omitted outputs are not rendered/extracted at all. The source pdf snapshot is not affected (use `VerifierSettings.ExcludeTargets("pdf")` for that).
+
+<!-- snippet: InitializeOutputs -->
+<a id='snippet-InitializeOutputs'></a>
+```cs
+[ModuleInitializer]
+public static void Initialize() =>
+    VerifyDocNet.Initialize(DocNetOutputs.Text);
+```
+<sup><a href='/src/StaticSettingsTests/ModuleInitializer.cs#L3-L9' title='Snippet source file'>snippet source</a> | <a href='#snippet-InitializeOutputs' title='Start of snippet'>anchor</a></sup>
+<!-- endSnippet -->
+
+
 ### Verify a file
 
 <!-- snippet: VerifyPdf -->
