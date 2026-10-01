@@ -4,7 +4,10 @@ public static partial class VerifyDocNet
 {
     public static bool Initialized { get; private set; }
 
-    public static void Initialize()
+    static DocNetOutputs outputs = DocNetOutputs.All;
+
+    /// <param name="outputs">The outputs each pdf is split into. Defaults to <see cref="DocNetOutputs.All"/>.</param>
+    public static void Initialize(DocNetOutputs outputs = DocNetOutputs.All)
     {
         if (Initialized)
         {
@@ -12,6 +15,7 @@ public static partial class VerifyDocNet
         }
 
         Initialized = true;
+        VerifyDocNet.outputs = outputs;
 
         InnerVerifier.ThrowIfVerifyHasBeenRun();
         VerifierSettings.RegisterStreamConverter("pdf", Convert);

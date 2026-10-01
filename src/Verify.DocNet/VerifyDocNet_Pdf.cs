@@ -69,11 +69,20 @@ public static partial class VerifyDocNet
         }
 
         var preserveTransparency = settings.GetPreserveTransparency();
+        var includePng = outputs.HasFlag(DocNetOutputs.Png);
+        var includeText = outputs.HasFlag(DocNetOutputs.Text);
         var targets = new List<Target>();
         var pages = new List<PageInfo>();
         for (var index = start; index < pagesToInclude; index++)
         {
             using var reader = document.GetPageReader(index);
+
+            pages.Add(new() { Index = index, Text = includeText ? reader.GetText() : null });
+
+            if (!includePng)
+            {
+                continue;
+            }
 
             var rawBytes = preserveTransparency ?
                 reader.GetImage() :
@@ -85,8 +94,6 @@ public static partial class VerifyDocNet
             var stream = new MemoryStream();
             PngEncoder.WriteBgraAsPng(rawBytes, width, height, stream);
             targets.Add(new("png", stream, name));
-
-            pages.Add(new() { Index = index, Text = reader.GetText() });
         }
 
         var info = new PdfInfo
