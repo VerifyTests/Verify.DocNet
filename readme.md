@@ -58,6 +58,7 @@ By default each pdf is split into a png per page and the text of each page (in t
 
  * `Png`: render each page to a png.
  * `Text`: extract the text of each page into the info.
+ * `None`: none of the above. Only the info and the source document are emitted.
  * `All` (default): both.
 
 Omitted outputs are not rendered/extracted at all. The source pdf snapshot is not affected (use `VerifierSettings.ExcludeTargets("pdf")` for that).
