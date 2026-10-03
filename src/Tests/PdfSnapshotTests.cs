@@ -8,11 +8,8 @@ public class PdfSnapshotTests
     [Test]
     public async Task SnapshotHasExpectedPageCount(string file, int expectedPages)
     {
-        var data = File.ReadAllBytes(Path.Combine(SourceDirectory(), file));
+        var data = File.ReadAllBytes(Path.Combine(ProjectFiles.ProjectDirectory, file));
         using var reader = DocLib.Instance.GetDocReader(data, new(scalingFactor: 2));
         await Assert.That(reader.GetPageCount()).IsEqualTo(expectedPages);
     }
-
-    static string SourceDirectory([CallerFilePath] string path = "") =>
-        Path.GetDirectoryName(path)!;
 }

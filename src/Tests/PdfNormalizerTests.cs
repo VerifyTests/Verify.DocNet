@@ -6,7 +6,7 @@ public class PdfNormalizerTests
     [Test]
     public async Task NormalizedDocumentStillLoads()
     {
-        var data = PdfNormalizer.Normalize(await File.ReadAllBytesAsync("sample.pdf"));
+        var data = PdfNormalizer.Normalize(await File.ReadAllBytesAsync(ProjectFiles.sample_pdf));
 
         using var reader = DocLib.Instance.GetDocReader(data, new(scalingFactor: 2));
         await Assert.That(reader.GetPageCount()).IsEqualTo(2);
@@ -17,7 +17,7 @@ public class PdfNormalizerTests
     {
         // sample-fop.pdf carries an uncompressed FOP-style XMP packet whose dc:date render time is
         // nested in rdf:Seq/rdf:li. It must be neutralized while the document still loads.
-        var data = PdfNormalizer.Normalize(await File.ReadAllBytesAsync("sample-fop.pdf"));
+        var data = PdfNormalizer.Normalize(await File.ReadAllBytesAsync(ProjectFiles.sample_fop_pdf));
 
         var text = Encoding.Latin1.GetString(data);
         await Assert.That(text).Contains("<rdf:li>0000-00-00T00:00:00Z</rdf:li>");
@@ -34,8 +34,8 @@ public class PdfNormalizerTests
         // the platform's XML writer, so the JDK decides the indentation: one build emits a compact
         // packet, the other indents every element, and the raw bytes differ. Once normalized, the pdf
         // snapshot must collapse to identical bytes on both, and still load.
-        var compactRaw = await File.ReadAllBytesAsync("sample-fop-compact.pdf");
-        var indentedRaw = await File.ReadAllBytesAsync("sample-fop-indented.pdf");
+        var compactRaw = await File.ReadAllBytesAsync(ProjectFiles.sample_fop_compact_pdf);
+        var indentedRaw = await File.ReadAllBytesAsync(ProjectFiles.sample_fop_indented_pdf);
         await Assert.That(compactRaw.SequenceEqual(indentedRaw)).IsFalse();
 
         var compact = PdfNormalizer.Normalize(compactRaw);
@@ -51,7 +51,7 @@ public class PdfNormalizerTests
     {
         // A page subset is re-serialized by pdfium (reintroducing volatile fields) then normalized;
         // it must remain a valid one-page document.
-        var data = await File.ReadAllBytesAsync("sample.pdf");
+        var data = await File.ReadAllBytesAsync(ProjectFiles.sample_pdf);
         var split = DocLib.Instance.Split(data, 1, 1);
         split = PdfNormalizer.Normalize(split);
 
