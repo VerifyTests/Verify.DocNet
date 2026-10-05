@@ -1,13 +1,4 @@
-﻿{
-  Document: {
-    Version: 1.4
-  },
-  PageCount: 2,
-  Pages: [
-    {
-      Number: 1,
-      Text:
- A Simple PDF File 
+﻿ A Simple PDF File 
  This is a small demonstration .pdf file - 
  just for use in the Virtual Mechanics tutorials. More text. And more 
  text. And more text. And more text. And more text. 
@@ -17,6 +8,3 @@
  And more text. And more text. 
  And more text. And more text. And more text. And more text. And more 
  text. And more text. And more text. Even more. Continued on page 2 ...
-    }
-  ]
-}

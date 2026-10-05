@@ -4,10 +4,7 @@ public static partial class VerifyDocNet
 {
     public static bool Initialized { get; private set; }
 
-    static DocNetOutputs outputs = DocNetOutputs.All;
-
-    /// <param name="outputs">The outputs each pdf is split into. Defaults to <see cref="DocNetOutputs.All"/>.</param>
-    public static void Initialize(DocNetOutputs outputs = DocNetOutputs.All)
+    public static void Initialize()
     {
         if (Initialized)
         {
@@ -15,68 +12,10 @@ public static partial class VerifyDocNet
         }
 
         Initialized = true;
-        VerifyDocNet.outputs = outputs;
 
         InnerVerifier.ThrowIfVerifyHasBeenRun();
-        VerifierSettings.RegisterStreamConverter("pdf", Convert);
-        VerifierSettings.RegisterFileConverter<IDocReader>((target, context) => Convert(null, target, context));
-    }
-
-    public static void PagesToInclude(this VerifySettings settings, int count)
-    {
-        if (count < 1)
-        {
-            throw new ArgumentOutOfRangeException(nameof(count), count, "PagesToInclude count must be greater than or equal to 1.");
-        }
-
-        settings.Context["VerifyDocNetPagesToInclude"] = count;
-    }
-
-    public static SettingsTask PagesToInclude(this SettingsTask settings, int count)
-    {
-        settings.CurrentSettings.PagesToInclude(count);
-        return settings;
-    }
-
-    static int GetPagesToInclude(this IReadOnlyDictionary<string, object> settings, int count)
-    {
-        if (settings.TryGetValue("VerifyDocNetPagesToInclude", out var value))
-        {
-            return Math.Min(count, (int)value);
-        }
-
-        return count;
-    }
-
-    public static void SinglePage(this VerifySettings settings, int index)
-    {
-        if (index < 0)
-        {
-            throw new ArgumentOutOfRangeException(nameof(index), index, "SinglePage index must be greater than or equal to 0.");
-        }
-
-        settings.Context["VerifyDocNetSinglePage"] = index;
-    }
-
-    /// <summary>
-    /// Zero based index of single page to include (overrules PagesToInclude when in range)
-    /// </summary>
-    public static SettingsTask SinglePage(this SettingsTask settings, int index)
-    {
-        settings.CurrentSettings.SinglePage(index);
-        return settings;
-    }
-
-    static bool TryGetSinglePage(this IReadOnlyDictionary<string, object> settings, out int singlePage)
-    {
-        if (settings.TryGetValue("VerifyDocNetSinglePage", out var value))
-        {
-            singlePage = (int)value;
-            return true;
-        }
-
-        singlePage = 0;
-        return false;
+        VerifierSettings.RegisterStreamConverter("pdf", (_, target, context) => Convert(target, context));
+        VerifierSettings.RegisterFileConverter<IDocReader>((target, context) => Convert(target, context));
     }
 
     public static void PageDimensions(this VerifySettings settings, PageDimensions pageDimensions) =>
