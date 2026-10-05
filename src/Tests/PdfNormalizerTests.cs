@@ -45,17 +45,4 @@ public class PdfNormalizerTests
         using var reader = DocLib.Instance.GetDocReader(compact, new(scalingFactor: 2));
         await Assert.That(reader.GetPageCount()).IsEqualTo(1);
     }
-
-    [Test]
-    public async Task NormalizedSinglePageSplitStillLoads()
-    {
-        // A page subset is re-serialized by pdfium (reintroducing volatile fields) then normalized;
-        // it must remain a valid one-page document.
-        var data = await File.ReadAllBytesAsync(ProjectFiles.sample_pdf);
-        var split = DocLib.Instance.Split(data, 1, 1);
-        split = PdfNormalizer.Normalize(split);
-
-        using var reader = DocLib.Instance.GetDocReader(split, new(scalingFactor: 2));
-        await Assert.That(reader.GetPageCount()).IsEqualTo(1);
-    }
 }

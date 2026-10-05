@@ -2,106 +2,89 @@ namespace VerifyTests;
 
 public static partial class VerifyDocNet
 {
-    static ConversionResult Convert(string? name, Stream stream, IReadOnlyDictionary<string, object> settings)
+    static ConversionResult Convert(Stream stream, IReadOnlyDictionary<string, object> settings)
     {
         var bytes = stream.ToBytes();
         var dimensions = settings.GetPageDimensions(new(scalingFactor: 2));
 
-        List<Target> targets;
-        PdfInfo info;
-        int start;
-        int endExclusive;
+        var conversion = new PagedConversion(settings);
         using (var reader = DocLib.Instance.GetDocReader(bytes, dimensions))
         {
-            (targets, info, start, endExclusive) = Render(name, reader, settings);
+            AddPages(conversion, reader, settings);
         }
 
-        // Subset the source to only the rendered pages so the pdf snapshot matches the png/info
-        // pages. A full-document render reuses the original buffer; a filtered render is re-split
-        // via pdfium into a fresh buffer.
-        var coversAllPages = start == 0 && endExclusive == info.PageCount;
-        var pdfBytes = coversAllPages ?
-            bytes :
-            DocLib.Instance.Split(bytes, start, endExclusive - 1);
-
-        if (settings.GetNormalize())
+        // The pdf is the source the pages were derived from, so it is snapshotted whole even when
+        // PagesToInclude limits which of its pages are rendered.
+        if (!settings.IsTargetExcluded("pdf"))
         {
-            // Neutralize the volatile fields for the pdf snapshot. When the whole document is reused
-            // this must happen only after the reader, which reads lazily from the same buffer, has
-            // been released.
-            pdfBytes = PdfNormalizer.Normalize(pdfBytes);
+            if (settings.GetNormalize())
+            {
+                // Neutralize the volatile fields for the pdf snapshot. This must happen only after
+                // the reader, which reads lazily from the same buffer, has been released.
+                bytes = PdfNormalizer.Normalize(bytes);
+            }
+
+            conversion.Source(new("pdf", new MemoryStream(bytes)));
         }
 
-        targets.Add(
-            new("pdf", new MemoryStream(pdfBytes), "pdf")
-            {
-                BypassComparersForSubsequentOnDifference = true
-            });
-
-        return new(info, targets);
+        return conversion.Build();
     }
 
     // Registered for callers that supply an IDocReader directly. No pdf snapshot is produced here
-    // since the original bytes are not available to subset and normalize.
-    static ConversionResult Convert(string? name, IDocReader document, IReadOnlyDictionary<string, object> settings)
+    // since the original bytes are not available to normalize, so the pages have no source and
+    // stand alone.
+    static ConversionResult Convert(IDocReader document, IReadOnlyDictionary<string, object> settings)
     {
-        var (targets, info, _, _) = Render(name, document, settings);
-        return new(info, targets);
+        var conversion = new PagedConversion(settings);
+        AddPages(conversion, document, settings);
+        return conversion.Build();
     }
 
     static NaiveTransparencyRemover transparencyRemover = new();
 
-    static (List<Target> targets, PdfInfo info, int start, int endExclusive) Render(string? name, IDocReader document, IReadOnlyDictionary<string, object> settings)
+    // PagedConversion names the pages, places their text, and says which pages and which of their
+    // outputs the verification wants, so a page that is not wanted is neither rendered nor read.
+    static void AddPages(PagedConversion conversion, IDocReader document, IReadOnlyDictionary<string, object> settings)
     {
-        var numberOfPages = document.GetPageCount();
-        var pagesToInclude = settings.GetPagesToInclude(numberOfPages);
-
-        var start = 0;
-        if (settings.TryGetSinglePage(out var singlePage))
+        conversion.Info = new PdfInfo
         {
-            if (singlePage >= numberOfPages)
-            {
-                throw new ($"Cannot Verify Page {singlePage} (0-based index) document contains only {numberOfPages} Page(s).");
-            }
-
-            start = singlePage;
-            pagesToInclude = singlePage + 1;
-        }
+            Version = document.GetPdfVersion().ToString()
+        };
 
         var preserveTransparency = settings.GetPreserveTransparency();
-        var includePng = outputs.HasFlag(DocNetOutputs.Png);
-        var includeText = outputs.HasFlag(DocNetOutputs.Text);
-        var targets = new List<Target>();
-        var pages = new List<PageInfo>();
-        for (var index = start; index < pagesToInclude; index++)
+        var includeImages = conversion.IncludeImages;
+        var includeText = conversion.IncludeText;
+        foreach (var number in conversion.Pages(document.GetPageCount()))
         {
-            using var reader = document.GetPageReader(index);
+            using var reader = document.GetPageReader(number - 1);
 
-            pages.Add(new() { Index = index, Text = includeText ? reader.GetText() : null });
-
-            if (!includePng)
+            string? text = null;
+            if (includeText)
             {
-                continue;
+                text = reader.GetText();
             }
 
-            var rawBytes = preserveTransparency ?
-                reader.GetImage() :
-                reader.GetImage(transparencyRemover);
+            Stream? image = null;
+            if (includeImages)
+            {
+                image = Render(reader, preserveTransparency);
+            }
 
-            var width = reader.GetPageWidth();
-            var height = reader.GetPageHeight();
-
-            var stream = new MemoryStream();
-            PngEncoder.WriteBgraAsPng(rawBytes, width, height, stream);
-            targets.Add(new("png", stream, name));
+            conversion.AddPage(number, image, text);
         }
+    }
 
-        var info = new PdfInfo
-        {
-            Version = document.GetPdfVersion().ToString(),
-            PageCount = numberOfPages,
-            Pages = pages
-        };
-        return (targets, info, start, pagesToInclude);
+    static MemoryStream Render(IPageReader reader, bool preserveTransparency)
+    {
+        var rawBytes = preserveTransparency ?
+            reader.GetImage() :
+            reader.GetImage(transparencyRemover);
+
+        var width = reader.GetPageWidth();
+        var height = reader.GetPageHeight();
+
+        var stream = new MemoryStream();
+        PngEncoder.WriteBgraAsPng(rawBytes, width, height, stream);
+        return stream;
     }
 }

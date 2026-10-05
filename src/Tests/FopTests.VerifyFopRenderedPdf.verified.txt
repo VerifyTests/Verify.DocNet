@@ -1,8 +1,11 @@
 ﻿{
-  Version: 1.4,
+  Document: {
+    Version: 1.4
+  },
   PageCount: 1,
   Pages: [
     {
+      Number: 1,
       Text:
 Verify.DocNet
 A deterministic PDF produced by Apache FOP for snapshot testing.

@@ -1,8 +1,11 @@
 ﻿{
-  Version: 1.4,
+  Document: {
+    Version: 1.4
+  },
   PageCount: 2,
   Pages: [
     {
+      Number: 1,
       Text:
  A Simple PDF File 
  This is a small demonstration .pdf file - 
@@ -16,7 +19,7 @@
  text. And more text. And more text. Even more. Continued on page 2 ...
     },
     {
-      Index: 1,
+      Number: 2,
       Text:
  Simple PDF File 2 
  ...continued from page 1. Yet more text. And more text. And more text. 

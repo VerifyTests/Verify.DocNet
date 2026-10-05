@@ -1,10 +1,11 @@
 public class PdfSnapshotTests
 {
-    // The SinglePage snapshots are subset to only the rendered page, so the accepted pdf must load
-    // as a one-page document. A readable guard alongside the opaque binary verified files.
-    [Arguments("Samples.VerifyFirstPage#pdf.verified.pdf", 1)]
-    [Arguments("Samples.VerifySecondPage#pdf.verified.pdf", 1)]
-    [Arguments("Samples.VerifyPdf#pdf.verified.pdf", 2)]
+    // PagesToInclude limits the pages that are rendered, not the pdf, so the accepted pdf must load
+    // as the whole document whichever pages were verified. A readable guard alongside the opaque
+    // binary verified files.
+    [Arguments("Samples.VerifyFirstPage.verified.pdf", 2)]
+    [Arguments("Samples.VerifySecondPage.verified.pdf", 2)]
+    [Arguments("Samples.VerifyPdf.verified.pdf", 2)]
     [Test]
     public async Task SnapshotHasExpectedPageCount(string file, int expectedPages)
     {
