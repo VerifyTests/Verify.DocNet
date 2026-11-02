@@ -10,8 +10,8 @@
     <PackageVersion Include="System.IO.Hashing" Version="10.0.14" />
     <PackageVersion Include="Magick.NET-Q16-AnyCPU" Version="15.0.0" />
     <PackageVersion Include="MarkdownSnippets.MsBuild" Version="28.5.1" />
-    <PackageVersion Include="TUnit" Version="1.76.28" />
-    <PackageVersion Include="ProjectDefaults" Version="1.0.184" />
+    <PackageVersion Include="TUnit" Version="1.78.0" />
+    <PackageVersion Include="ProjectDefaults" Version="1.0.187" />
     <PackageVersion Include="ProjectFiles" Version="1.6.0" />
     <PackageVersion Include="Verify" Version="33.3.4" />
     <PackageVersion Include="Verify.TUnit" Version="33.3.4" />
